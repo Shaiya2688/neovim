@@ -116,7 +116,7 @@ sudo rm -r /usr/local/share/nvim/
 **Setup Plugin Manager**
 
 ```sh
-git clone https://github.com/junegunn/vim-plug ~/.config/nvim/bundle/vim-plug
+git clone https://github.com/junegunn/vim-plug ~/.config/nvim/vimrc/bundle/vim-plug
 ```
 
 **Update Plugins**
