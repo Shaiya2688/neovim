@@ -10,6 +10,7 @@ vim.g.maplocalleader = '\\' -- Set defalut <LocalLeader> for keymap
 if (vim.fn.has('termguicolors') or vim.fn.has('vcon')) then
   vim.opt.termguicolors = true -- Enables 24-bit RGB true color in the TUI if the host terminal supported
 end
+-- TODO
 --[[ hi clear Normal		"clear Normal for &background
 set bg&
 syntax on			"enable syntax highlighting and overwrite before hi setting at Vim start
@@ -20,13 +21,13 @@ if &bg == "dark"	"set shaiya-light as default colorscheme if &background not def
 	colo shaiya-light
 else
 	colo shaiya-light
-endif
-
-set guicursor=v-c-n-i-ci-ve:ver25,r-cr:hor20,o:hor50
-      \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-      \,sm:block-blinkwait175-blinkoff150-blinkon175	" set guicursor=  will use OS cursor shape
- ]]
-
+endif ]]
+vim.opt.guicursor = { "n-v-c-i-ci-ve:ver25",
+  "sm:block-blinkwait175-blinkoff150-blinkon175",
+  "r-cr:hor20",
+  "o:hor50",
+  "a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor"
+}
 
 --[[ Default Options for the Encoding & Language ]]
 -- "file encode setting

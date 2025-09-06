@@ -22,6 +22,10 @@ vim.keymap.set({'n', 'v'}, '<C-w><C-m>', utils.mouse.mode_toggle, { desc = "Togg
 vim.keymap.set({'n', 'v'}, '<C-w>m', utils.mouse.mode_toggle, { desc = "Toggle Mouse Mode" })
 
 
+--[[ Maps for Fold ]]
+vim.keymap.set('n', '<Leader>f', utils.fold.column_toggle, { desc = "Toggle Fold Column" })
+
+
 --[[ Maps for Window ]]
 -- Move to window using <Alt> + Arrow keys
 vim.keymap.set('n', '<A-Left>', "<C-w><Left>", { desc = "Go to Left Window" })
@@ -70,9 +74,23 @@ vim.keymap.set('v', '<', "<gv", { desc = "Move Left" })
 
 
 --[[ Maps for Terminal ]]
-
-
-
+-- Close or Open terminal in new window using <C-_> or <C-/>
+vim.keymap.set({ 'n', 't' }, '<C-_>', function()
+	local cmd
+	if vim.opt.buftype:get() ~= 'terminal' then
+		cmd = "horizontal terminal" .. ((vim.fn.executable('bash') and " bash") or "")
+	else
+		cmd = "quit"
+	end
+	vim.cmd(cmd)
+end, { desc = "Open / Close Terminal", silent = true })
+-- Open terminal in new tab page or floating window, should using above key combined with <C-t> or <C-f>
+vim.keymap.set('n', '<C-_><C-t>', "<Cmd>execute 'tab terminal' . (executable('bash') ? ' bash' : '')<Cr>", { desc = "Open Terminal in New Tab Page", silent = true })
+-- TODO: support floating terminal
+vim.keymap.set('n', '<C-_><C-f>', "<Cmd>execute 'tab terminal' . (executable('bash') ? ' bash' : '')<Cr>", { desc = "Open Terminal in Float Window", silent = true })
+-- Enter terminal normal mode using '<Esc> twice or scroll the mouse wheel
+vim.keymap.set('t', '<Esc><Esc>', "<C-\\><C-n>", { desc = 'Enter Terminal Normal Mode' })
+-- Exit terminal normal mode using 'i'/'I'/'a'/'A' keys
 
 
 if true then return {} end
@@ -83,48 +101,6 @@ if true then return {} end
 "Help key map for show defined commands"
 "TODO: <C-Fxx>/<S-Fxx>/<A-Fxx> not support in nvim
 nmap <silent> <C-F1> :call HelpCmdInfo()<cr>
-"TODO: need change in nvim
-"terminal setting
-if has('terminal') || has('nvim')
-  if executable('bash')
-    nn <silent> <leader>T :ter ++close bash<cr>
-    nn <silent> <leader><C-t> :tab ter ++close bash<cr>
-  else
-		nn <silent> <leader>T :ter ++close<cr>
-		nn <silent> <leader><C-t> :tab ter ++close<cr>
-	endif
-
-	func! Terminal_ExitNormalMode()
-		unm <buffer> <silent> <RightMouse>
-		unm <buffer> <silent> <C-w>t
-		unm <buffer> <silent> <C-w><C-t>
-		unm <buffer> <silent> <C-w>q
-		unm <buffer> <silent> <C-w><C-q>
-		call feedkeys("A")
-	endfunc
-
-	func! Terminal_EnterNormalMode()
-		if &buftype == 'terminal' && mode('') == 't'
-			call feedkeys("\<c-w>N")
-			nor <buffer> <silent> <RightMouse> :<C-u>call Terminal_ExitNormalMode()<cr>
-			nor <buffer> <silent> <C-w>t :<C-u>call Terminal_ExitNormalMode()<cr>
-			nor <buffer> <silent> <C-w><C-t> :<C-u>call Terminal_ExitNormalMode()<cr>
-			nor <buffer> <silent> <C-w>q <C-w>:<C-u>q!<cr>
-			nor <buffer> <silent> <C-w><C-q> <C-w>:<C-u>q!<cr>
-
-		endif
-	endfunc
-
-	"scroll twice to avoid the middlemouse click trigger incorrectly
-	tno <silent> <ScrollWheelUp><ScrollWheelUp> <C-w>:call Terminal_EnterNormalMode()<cr>
-	tno <silent> <C-w>n <C-w>:call Terminal_EnterNormalMode()<cr>
-	tno <silent> <C-w><C-n> <C-w>:call Terminal_EnterNormalMode()<cr>
-	tno <silent> <C-w>q <C-w>:q!<cr>
-	tno <silent> <C-w><C-q> <C-w>:q!<cr>
-endif
-
-
-nmap <silent> <Space>r :if &fdc>0\|set fdc=0\|else\|set fdc=3\|endif<cr>
 
 "select block shortcuts setting
 nmap <Space>q	vab
@@ -287,9 +263,6 @@ let g:SrcExpl_prevDefKey = "<S-F5>"    "Set \"<S-F5>\" key for displaying the pr
 let g:SrcExpl_nextDefKey = "<S-F6>"    "Set \"<S-F6>\" key for displaying the next definition in the jump list
 
 ]]
-
-
-
 
 
 

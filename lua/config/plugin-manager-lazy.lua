@@ -4,6 +4,21 @@ function M.setup()
   local uv = vim.uv or vim.loop
   local lazypath = vim.fn.stdpath("config") .. "/lua/bundle/lazy/lazy.nvim"
 
+  -- Validate that lazy is available
+  if uv.fs_stat(lazypath) then
+    vim.opt.rtp:prepend(lazypath)
+    if pcall(require, "lazy") then
+      M.is_ready = true
+      return
+    else
+      local ok, out = require("config.utils").file.remove_dir(lazypath)
+      vim.api.nvim_echo({
+        { ("Find invalid lazy from: %s, start re-install\n"):format(lazypath), "WarningMsg" },
+        { vim.trim((ok and "") or (out or "")), "WarningMsg" },
+      }, true, {})
+    end
+  end
+
   -- Bootstrap lazy.nvim
   if not uv.fs_stat(lazypath) then
     vim.api.nvim_echo({

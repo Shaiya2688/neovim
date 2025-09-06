@@ -2,22 +2,7 @@
 set nocompatible	"first option, enable VIM extended functionality based on VI
 filetype off		"Some plugins need to turn this off
 set rtp+=~/.config/nvim/optional-tools
-set t_Co=256		"Color setting, force Vim into 256 color mode to bypass the automatic detection of terminal colors
-if has('termguicolors') || has('vcon')
-	set tgc			"set Vim into 24-bit true color mode if terminal supported
-endif
-hi clear Normal		"clear Normal for &background
-set bg&
-syntax on			"enable syntax highlighting and overwrite before hi setting at Vim start
-if &bg == "dark"	"set shaiya-light as default colorscheme if &background not define
-	" echoh WarningMsg | echo "current not support dark colorscheme" | echoh None
-	" colo shaiya-dark
-	"TODO: force in nvim
-	colo shaiya-light
-else
-	colo shaiya-light
-endif
-let mapleader = '\'	"set defalut mapleader to use to keymap
+
 "show syntax highlighting groups for word under cursor
 nmap <silent> <leader>h1 :call <SID>SynStack()<CR>
 "show highlighting color value for word under cursor, valid for gui Vim
@@ -30,31 +15,6 @@ if executable('rgb2cterm')
 endif
 "map cterm color to GUI on split buffer
 nmap <silent> <leader>h4 :XtermColorTable<CR>
-set hlsearch
-set guicursor=v-c-n-i-ci-ve:ver25,r-cr:hor20,o:hor50
-			\,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-			\,sm:block-blinkwait175-blinkoff150-blinkon175	" set guicursor=  will use OS cursor shape
-set cursorline
-"TODO: not support in nvim
-"set clipboard^=autoselect "copy visual mode selected to * register for middlemouse paste
-"sync vim clipboard register to OS clipboard
-if &clipboard !~# 'unnamedplus' && has('unnamedplus')
-	set clipboard^=unnamedplus
-endif
-set ruler			"show the cursor position all the time(Vi default: off)
-set showmode		"show current mode(Vim default: on, Vi default: off)
-set showtabline=1	"show tabline for multi-tabs
-set wildmenu		"enable command line complete by use tab
-set wildmode=longest,list,full
-set nowrap			"no wrap long line
-set nu				"view line number
-set ts=4			"set tab view size
-set ignorecase		"ignore character case
-" set smartcase
-set backspace=indent,eol,start	"set backspace can remove autoindent or join previous line(VI is disable)
-set showmatch		"when a bracket is inserted, briefly jump to the matching one if the match can be seen on the screen.
-delmarks!			"clear position of a-z marks, m{a-zA-Z} to mark position, `{a-zA-Z} or '{a-zA-Z} to jump assigned position
-set ttimeoutlen=50	"The time in milliseconds that is waited for a key code or mapped key sequence to complete.
 
 "Help key map for show defined commands"
 "TODO: <C-Fxx>/<S-Fxx>/<A-Fxx> not support in nvim
@@ -100,28 +60,6 @@ if has('terminal') || has('nvim')
 	tno <silent> <C-w><C-q> <C-w>:q!<cr>
 endif
 
-"mouse mode setting
-set mouse=nvih
-func! MouseModeSwitch()
-	if &mouse !=# 'nvih'
-		set mouse=nvih
-	else
-		set mouse=v
-	endif
-endfunc
-map <silent> <C-w><C-m> :call MouseModeSwitch()<cr>
-map <silent> <C-w>m :call MouseModeSwitch()<cr>
-
-"indent setting
-" set autoindent
-set smartindent
-set shiftwidth=0	"use &ts value
-
-"popmenu setting
-set completeopt=longest,menu ",preview
-
-"vim diff settings
-set diffopt=filler,context:10,vertical,foldcolumn:1
 
 "file format setting for <EOL> define
 set fileformat=unix
@@ -134,43 +72,14 @@ if v:lang =~ "utf8$" || v:lang =~ "utf-8$"
   set fencs=utf-8,ucs-bom,latin1
 endif
 
-"fix vim9 show keycode ^[[?4m or ^[[>4;2m or ^[[>4;m if terminal use gnome-terminal
-set t_RK=
-set t_TI=
-set t_TE=
-"fix vim show keycode ^[[%p1%d q when enter terminal job mode
-set t_SH=
-
 "font setting
 " set guifont=Courier_New:h11:cANSI
 " set guifontwide=新宋体:h11:cGB2312
-
-"fold setting
-" set foldmethod=indent "fold by have the same indentation
-set foldmethod=syntax
-set foldlevel=100
-set fdc=0
-nmap <silent> <Space>r :if &fdc>0\|set fdc=0\|else\|set fdc=3\|endif<cr>
 
 "select block shortcuts setting
 nmap <Space>q	vab
 nmap <Space>w	vaB
 nmap <Space>e	v%
-
-"window move shortcuts setting
-map <A-LEFT> <C-w><LEFT>
-map <A-RIGHT> <C-w><RIGHT>
-map <A-UP> <C-w><UP>
-map <A-DOWN> <C-w><DOWN>
-map <S-A-LEFT> <C-w><
-map <S-A-RIGHT> <C-w>>
-map <S-A-UP> <C-w>+
-map <S-A-DOWN> <C-w>-
-" <C-W>_<C-x>/H/J/K/L to exchange window
-
-"tab page move shortcuts setting, switch tab page use <c-pageup>/<c-pagedown> or gt/gT, switch to {count} tab page use {count}gt or {count}<c-pagedown>
-nmap <silent> > :+tabmove<cr>
-nmap <silent> < :-tabmove<cr>
 
 "Quickfix window shortcuts setting
 nn <silent> <F5> :if !JumpWinInvalid()\|cp\|endif<cr>
@@ -426,9 +335,6 @@ if filereadable(expand('~/.config/nvim/vimrc/bundle/vim-plug/plug.vim'))
 endif
 
 au BufNewFile,BufReadPost * call LoadingFileTypeSetting()
-
-"Plug 'yianwillis/vimcdoc'
-set helplang=cn		"if have found cn help doc
 
 "Plug 'inkarkat/vim-mark'
 hi MarkWord1 gui=None guifg=black guibg=#00ffff cterm=None ctermfg=0 ctermbg=14
@@ -741,7 +647,6 @@ nmap <silent> ghp <Plug>(GitGutterPreviewHunk)
 nmap <silent> ghs <Plug>(GitGutterStageHunk)
 nmap <silent> ghu <Plug>(GitGutterUndoHunk)
 nmap <silent> ghf :GitGutterFold<cr>
-set updatetime=100
 let g:gitgutter_sign_added              = '+'
 let g:gitgutter_sign_modified           = '~'
 let g:gitgutter_sign_removed            = '_'
