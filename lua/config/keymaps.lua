@@ -1,20 +1,20 @@
 local utils = require("config.utils")
 -- Add any keymaps here
 
---[[ 
-Adds a new mapping. Examples:                                                                                                                                                                                                                                        
--- Map to a Lua function:
-vim.keymap.set('n', 'lhs', function() print("real lua function") end)
--- Map to multiple modes:
-vim.keymap.set({'n', 'v'}, '<leader>lr', vim.lsp.buf.references, { buffer = true })
--- Buffer-local mapping:
-vim.keymap.set('n', '<leader>w', "<cmd>w<cr>", { silent = true, buffer = 5 })
--- Expr mapping:
-vim.keymap.set('i', '<Tab>', function()
-return vim.fn.pumvisible() == 1 and "<C-n>" or "<Tab>"
-end, { expr = true })
--- <Plug> mapping:
-vim.keymap.set('n', '[%%', '<Plug>(MatchitNormalMultiBackward)'
+--[[
+  Adds a new mapping. Examples:
+  -- Map to a Lua function:
+  vim.keymap.set('n', 'lhs', function() print("real lua function") end)
+  -- Map to multiple modes:
+  vim.keymap.set({'n', 'v'}, '<leader>lr', vim.lsp.buf.references, { buffer = true })
+  -- Buffer-local mapping:
+  vim.keymap.set('n', '<leader>w', "<cmd>w<cr>", { silent = true, buffer = 5 })
+  -- Expr mapping:
+  vim.keymap.set('i', '<Tab>', function()
+  return vim.fn.pumvisible() == 1 and "<C-n>" or "<Tab>"
+  end, { expr = true })
+  -- <Plug> mapping:
+  vim.keymap.set('n', '[%%', '<Plug>(MatchitNormalMultiBackward)'
 ]]
 
 --[[ Maps for Mouse Modes ]]

@@ -6,9 +6,10 @@ vim.g.mapleader = '\\'  -- Set defalut <Leader> for keymap
 vim.g.maplocalleader = '\\' -- Set defalut <LocalLeader> for keymap
 
 
---[[ Default Options for the Colors & Fonts ]]
+--[[ Default Options for the Colors & Fonts & Cursor Shapes ]]
 if (vim.fn.has('termguicolors') or vim.fn.has('vcon')) then
-  vim.opt.termguicolors = true -- Enables 24-bit RGB true color in the TUI if the host terminal supported
+  -- This option may cause screen to flash at Neovim start if terminal is not support 24-bit RGB true color by default
+  vim.opt.termguicolors = true -- Force enables 24-bit RGB true color in the TUI if Neovim support terminal true color feature
 end
 -- TODO
 --[[ hi clear Normal		"clear Normal for &background
@@ -85,7 +86,7 @@ vim.opt.smartcase = false -- Don't overwrite ignore case with capitals
 -- vim.opt.clipboard:prepend { "unnamedplus", "autoselect" } -- Copy Visual mode selected to * register for MiddleMouse Paste and sync clipboard register to system clipboard
 vim.opt.showmatch = true -- When a bracket is inserted, briefly jump to the matching one if the match can be seen on the screen.
 vim.opt.matchpairs = {'(:)', '{:}', '[:]'}
-vim.opt.matchtime = 5 -- 0.5 second to show the matching paren 
+vim.opt.matchtime = 5 -- 0.5 second to show the matching paren
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
 -- File options

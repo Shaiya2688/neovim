@@ -20,46 +20,6 @@ nmap <silent> <leader>h4 :XtermColorTable<CR>
 "TODO: <C-Fxx>/<S-Fxx>/<A-Fxx> not support in nvim
 nmap <silent> <C-F1> :call HelpCmdInfo()<cr>
 
-"TODO: need change in nvim
-"terminal setting
-if has('terminal') || has('nvim')
-	if executable('bash')
-		nn <silent> <leader>T :ter ++close bash<cr>
-		nn <silent> <leader><C-t> :tab ter ++close bash<cr>
-	else
-		nn <silent> <leader>T :ter ++close<cr>
-		nn <silent> <leader><C-t> :tab ter ++close<cr>
-	endif
-
-	func! Terminal_ExitNormalMode()
-		unm <buffer> <silent> <RightMouse>
-		unm <buffer> <silent> <C-w>t
-		unm <buffer> <silent> <C-w><C-t>
-		unm <buffer> <silent> <C-w>q
-		unm <buffer> <silent> <C-w><C-q>
-		call feedkeys("A")
-	endfunc
-
-	func! Terminal_EnterNormalMode()
-		if &buftype == 'terminal' && mode('') == 't'
-			call feedkeys("\<c-w>N")
-			nor <buffer> <silent> <RightMouse> :<C-u>call Terminal_ExitNormalMode()<cr>
-			nor <buffer> <silent> <C-w>t :<C-u>call Terminal_ExitNormalMode()<cr>
-			nor <buffer> <silent> <C-w><C-t> :<C-u>call Terminal_ExitNormalMode()<cr>
-			nor <buffer> <silent> <C-w>q <C-w>:<C-u>q!<cr>
-			nor <buffer> <silent> <C-w><C-q> <C-w>:<C-u>q!<cr>
-
-		endif
-	endfunc
-
-	"scroll twice to avoid the middlemouse click trigger incorrectly
-	tno <silent> <ScrollWheelUp><ScrollWheelUp> <C-w>:call Terminal_EnterNormalMode()<cr>
-	tno <silent> <C-w>n <C-w>:call Terminal_EnterNormalMode()<cr>
-	tno <silent> <C-w><C-n> <C-w>:call Terminal_EnterNormalMode()<cr>
-	tno <silent> <C-w>q <C-w>:q!<cr>
-	tno <silent> <C-w><C-q> <C-w>:q!<cr>
-endif
-
 
 "file format setting for <EOL> define
 set fileformat=unix

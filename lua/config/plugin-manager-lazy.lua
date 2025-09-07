@@ -66,26 +66,30 @@ function M.setup_plugins()
   end
 
   require("lazy").setup({
+    --[[ Import plugins (see the lua/plugins/example.lua for plugin's spec writing guide) ]]
     spec = {
-      -- add LazyVim and import its plugins
-      -- { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+      -- add some excellent plugin repositories and import its plugins
+      -- { "M/N", import = "XXX.plugins" },
       -- import/override with your plugins
       { import = "plugins" },
     },
+
+    --[[ Configure any other settings here (see the documentation for more details) ]]
+    -- colorscheme that will be used when installing plugins.
+    -- install = { colorscheme = { "tokyonight", "habamax" } },
     defaults = {
-      -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
-      -- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
+      -- By default, custom plugins will be loaded during startup.
+      -- If you know what you're doing, you can set the lazy-loaded for specified plugin in its plugin spec.
       lazy = false,
-      -- It's recommended to leave version=false for now, since a lot the plugin that support versioning,
-      -- have outdated releases, which may break your Neovim install.
+      -- It's recommended to leave version=false for now, since a lot the plugin that support versioning have outdated releases, which may break Neovim install.
       version = false, -- always use the latest git commit
       -- version = "*", -- try installing the latest stable version for plugins that support semver
     },
-    -- install = { colorscheme = { "tokyonight", "habamax" } },
+    -- automatically check for plugin updates
     checker = {
       enabled = true, -- check for plugin updates periodically
       notify = false, -- notify on update
-    }, -- automatically check for plugin updates
+    },
     performance = {
       rtp = {
         -- disable some rtp plugins
