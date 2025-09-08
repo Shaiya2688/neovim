@@ -88,7 +88,7 @@ return {
     | keys          | string or string[] or LazyKeysSpec[]| Lazy-load on '#key mapping'                                                                           |
     |               | or fun(self:LazyPlugin,             |                                                                                                       |
     |               |        keys:string[])               |                                                                                                       |
-    |               |      :(string | LazyKeysSpec)[]     |                                                                                                       |
+    |               |    :(string | LazyKeysSpec)[]       |                                                                                                       |
     +---------------+-------------------------------------+-------------------------------------------------------------------------------------------------------+
     Refer to the '#Lazy Loading' section for more information.
 

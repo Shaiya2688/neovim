@@ -1,5 +1,5 @@
 -- loading some useful features based on the vim script
--- vim.cmd([[source ~/.config/nvim/init.vimrc.vim]])
+-- vim.cmd([[source init.vimrc.vim]])
 
 require("config.options-core")
 require("config.plugin-setup")

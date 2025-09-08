@@ -2,19 +2,49 @@
 " This is the default color scheme for &bg == light.
 "
 set background=light
-if version > 580
-	hi clear
-	if exists("syntax_on")
-		syntax reset
-	endif
+
+if has('nvim')
+  source $VIMRUNTIME/colors/vim.lua " Nvim: revert to Vim default color scheme
+else
+  hi clear
+endif
+if exists("syntax_on")
+  syntax reset
 endif
 
+" Force 256 color support only
 set t_Co=256
-if has('termguicolors') || has('vcon')
-	set tgc
+if has('termguicolors') || has('vcon') || has('gui_running')
+  set termguicolors
 endif
 let g:colors_name = "shaiya-light"
 
+" The following (case-insensitive) names are recognized for cterm colors
+" NR      COLOR NAME
+" 0       Black
+" 1       DarkRed
+" 2       DarkGreen
+" 3       Brown, DarkYellow
+" 4       DarkBlue
+" 5       DarkMagenta
+" 6       DarkCyan
+" 7       LightGray, LightGrey, Gray, Grey
+" 8       DarkGray, DarkGrey
+" 9       Red, LightRed
+" 10      Green, LightGreen
+" 11      Yellow, LightYellow
+" 12      Blue, LightBlue
+" 13      Magenta, LightMagenta
+" 14      Cyan, LightCyan
+" 15      White
+let g:terminal_ansi_colors = [
+  \ '#000000', '#cd0000', '#00cd00', '#ffaf00', '#5454ff', '#cd00cd',  '#00cdcd', '#d7d7d7',
+  \ '#7f7f7f', '#ff0000', '#00ff00', '#ffff00', '#00afff', '#ff00ff',  '#00ffff', '#ffffff'
+  \]
+" Nvim uses g:terminal_color_{0-15} instead
+for i in range(g:terminal_ansi_colors->len())
+  let g:terminal_color_{i} = g:terminal_ansi_colors[i]
+endfor
 " ---------------- highlight-default ----------------
 hi ColorColumn gui=None guibg=#add8e6 cterm=None
 "hi Conceal -- no settings --
@@ -165,9 +195,28 @@ hi Todo gui=None guifg=#0000ff guibg=#ff8c00 cterm=None
 
 
 " ---------------------- highlight for ME -----------------------
+function! s:color_index2rgb(idx)
+  let idx = a:idx
+  " 0-15 ansi colors:
+  if idx < 16
+    return g:terminal_ansi_colors[idx]
+  endif
+  " 232-255 gray colors:
+  if idx >= 232
+    let gray = 8 + (idx - 232) * 10
+    return printf('#%02x%02x%02x', gray, gray, gray)
+  endif
+  " 16-231 6x6x6 cube:
+  let idx = idx - 16
+  let r = idx / 36
+  let g = (idx % 36) / 6
+  let b = idx % 6
+  let map = [0, 95, 135, 175, 215, 255]
+  return printf('#%02x%02x%02x', map[r], map[g], map[b])
+endfun
 " ## cterm 256 colors View ##
 for num_col in range(256)
-	exec "hi ColorView".num_col." ctermfg=0 ctermbg=".num_col
+  exec "hi ColorView".num_col." ctermfg=0 ctermbg=".num_col." guifg=#000000 guibg=".s:color_index2rgb(num_col)
 endfor
 
 " ---- highlight-groups for group-name with special filetype ----

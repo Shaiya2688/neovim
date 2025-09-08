@@ -7,22 +7,14 @@ vim.g.maplocalleader = '\\' -- Set defalut <LocalLeader> for keymap
 
 
 --[[ Default Options for the Colors & Fonts & Cursor Shapes ]]
-if (vim.fn.has('termguicolors') or vim.fn.has('vcon')) then
+if (vim.fn.has('termguicolors') or vim.fn.has('vcon') or vim.fn.has('gui_running')) then
   -- This option may cause screen to flash at Neovim start if terminal is not support 24-bit RGB true color by default
   vim.opt.termguicolors = true -- Force enables 24-bit RGB true color in the TUI if Neovim support terminal true color feature
 end
--- TODO
---[[ hi clear Normal		"clear Normal for &background
-set bg&
-syntax on			"enable syntax highlighting and overwrite before hi setting at Vim start
-if &bg == "dark"	"set shaiya-light as default colorscheme if &background not define
-	" echoh WarningMsg | echo "current not support dark colorscheme" | echoh None
-	" colo shaiya-dark
-  TODO: force in nvim
-	colo shaiya-light
-else
-	colo shaiya-light
-endif ]]
+-- TODO: support colorscheme 'shaiya-dark'
+-- vim.cmd.colorscheme('shaiya-' .. ((vim.opt.background:get() == 'light' and 'light') or 'dark'))  -- Using the builtin colorscheme
+vim.cmd.colorscheme('shaiya-light') -- Current dark colorscheme unsupported
+vim.cmd('syntax on')  -- Enable syntax highlighting
 vim.opt.guicursor = { "n-v-c-i-ci-ve:ver25",
   "sm:block-blinkwait175-blinkoff150-blinkon175",
   "r-cr:hor20",
