@@ -17,6 +17,10 @@ local utils = require("config.utils")
   vim.keymap.set('n', '[%%', '<Plug>(MatchitNormalMultiBackward)'
 ]]
 
+--[[ Maps for Syntax Highlight ]]
+vim.keymap.set('n', '<Leader>h', utils.hl.show_synstack, { desc = "Show Syntax Stack Under Cursor" })
+
+
 --[[ Maps for Mouse Modes ]]
 vim.keymap.set({'n', 'v'}, '<C-w><C-m>', utils.mouse.mode_toggle, { desc = "Toggle Mouse Mode" })
 vim.keymap.set({'n', 'v'}, '<C-w>m', utils.mouse.mode_toggle, { desc = "Toggle Mouse Mode" })

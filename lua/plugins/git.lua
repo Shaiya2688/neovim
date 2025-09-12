@@ -1,8 +1,11 @@
+local utils = require("config.utils")
+
 return {
   -- Adds git related signs to the gutter, as well as utilities for managing changes
   {
     "lewis6991/gitsigns.nvim",
     -- See `:help gitsigns` to understand what the configuration keys do
+    event = "VeryLazy",
     opts = {
       signs = {
         add          = { text = '+' },
@@ -20,6 +23,12 @@ return {
         changedelete = { text = '~_' },
         untracked    = { text = '?' },
       },
+      signs_staged_enable = true,
+      signcolumn = true,
+      numhl = false,
+      linehl = false,
+      culhl = false,
+      word_diff = true,
       attach_to_untracked = true,
       on_attach = function(buffer)
         local gs = package.loaded.gitsigns
@@ -53,25 +62,56 @@ return {
           gs.preview_hunk()
           gs.preview_hunk() -- auto focus the preview windos
         end, { buffer = buffer, desc = "Git Hunks Preview" })
-
-        -- vim.api.nvim_set_hl
-
-        -- hi GitGutterAdd guifg=#a3e29e guibg=#a3e29e ctermfg=157 ctermbg=157
-        -- hi GitGutterAddLine guibg=#d9ffcd ctermbg=194
-        -- hi GitGutterChange guifg=#c3d6e8 guibg=#c3d6e8 ctermfg=153 ctermbg=153
-        -- hi GitGutterChangeLine guibg=#c3d6e8 ctermbg=153
-        -- hi GitGutterDelete guifg=#ff0000 guibg=NONE ctermfg=9 ctermbg=NONE
-        -- hi GitGutterDeleteLine gui=None cterm=None
-        -- hi link GitGutterChangeDelete GitGutterChange
-        -- hi link GitGutterChangeDeleteLine GitGutterChangeLine
-        -- hi diffAdded guifg=#008000 ctermfg=28
-        -- hi diffRemoved guifg=#ff0000 ctermfg=1
       end,
-
     },
+
+    config = function(_, opts)
+      local highlight_setup = function()
+        utils.hl.create_group('GitSignsAdd', { target='UserGitAddSigns' })
+        utils.hl.create_group('GitSignsAddNr', { target='UserGitAddLineNr' })
+        utils.hl.create_group('GitSignsAddLn', { target='UserGitAddLine' })
+        utils.hl.create_group('GitSignsChange', { target='UserGitChangeSigns' })
+        utils.hl.create_group('GitSignsChangeNr', { target='UserGitChangeLineNr' })
+        utils.hl.create_group('GitSignsChangeLn', { target='UserGitChangeLine' })
+        utils.hl.create_group('GitSignsDelete', { target='UserGitDeleteSigns' })
+        utils.hl.create_group('GitSignsDeleteNr', { target='UserGitDeleteLineNr' })
+        utils.hl.create_group('GitSignsDeleteLn', { target='UserGitDeleteLine' })
+        utils.hl.create_group('GitSignsChangedelete', { target='UserGitChangeDeleteSigns' })
+        utils.hl.create_group('GitSignsChangedeleteNr', { target='UserGitChangeDeleteLineNr' })
+        utils.hl.create_group('GitSignsChangedeleteLn', { target='UserGitChangeDeleteLine' })
+        utils.hl.create_group('GitSignsStagedAdd', { target='UserGitStagedSigns' })
+        utils.hl.create_group('GitSignsStagedAddNr', { target='UserGitAddLineNr' })
+        utils.hl.create_group('GitSignsStagedAddLn', { target='UserGitStagedLine' })
+        utils.hl.create_group('GitSignsStagedChange', { target='UserGitStagedSigns' })
+        utils.hl.create_group('GitSignsStagedChangeNr', { target='UserGitChangeLineNr' })
+        utils.hl.create_group('GitSignsStagedChangeLn', { target='UserGitStagedLine' })
+        utils.hl.create_group('GitSignsStagedDelete', { target='UserGitStagedBoldSigns' })
+        utils.hl.create_group('GitSignsStagedDeleteNr', { target='UserGitDeleteLineNr' })
+        utils.hl.create_group('GitSignsStagedChangedelete', { target='UserGitStagedSigns' })
+        utils.hl.create_group('GitSignsStagedChangedeleteNr', { target='UserGitChangeDeleteLineNr' })
+        utils.hl.create_group('GitSignsStagedChangedeleteLn', { target='UserGitStagedLine' })
+        utils.hl.create_group('GitSignsStagedTopdelete', { target='UserGitStagedBoldSigns' })
+        utils.hl.create_group('GitSignsStagedTopdeleteNr', { target='UserGitDeleteLineNr' })
+        utils.hl.create_group('GitSignsStagedTopdeleteLn', { target='UserGitStagedLine' })
+        utils.hl.create_group('GitSignsStagedUntracked', { target='UserGitStagedSigns' })
+        utils.hl.create_group('GitSignsStagedUntrackedNr', { target='UserGitAddLineNr' })
+        utils.hl.create_group('GitSignsStagedUntrackedLn', { target='UserGitStagedLine' })
+        utils.hl.create_group('GitSignsAddPreview', { target='UserGitPreviewAdd' })
+        utils.hl.create_group('GitSignsDeletePreview', { target='UserGitPreviewRemoved' })
+      end
+
+      -- Reset highlight groups when colorscheme changes
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        group = vim.api.nvim_create_augroup("CustomGitSignsHighlight", { clear = true }),
+        callback = highlight_setup,
+      })
+
+      require('gitsigns').setup(opts)
+      highlight_setup()
+    end
   },
 
-  -- TODO implement gd, gA, gl
+  -- TODO support ga, gA, gl
   -- vim.keymap.set('n', 'ga', gs.diffthis, { buffer = buffer, desc = "Git Diff All Files With Staged" })
   -- vim.keymap.set('n', 'gA', function() gs.diffthis('~') end, { buffer = buffer, desc = "Git Diff All Files With 'HEAD'" })
   -- vim.keymap.set('n', 'gl', "<Cmd>Gitsigns toggle_signs<Cr>", { buffer = buffer, desc = "Git Log" })

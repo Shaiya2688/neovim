@@ -1,5 +1,5 @@
 local M = {
-  bundlepath = vim.fn.stdpath("config") .. "/lua/bundle",
+  bundlepath = vim.fn.stdpath("config") .. "/bundle/lazy",
   is_ready = false,
 }
 
@@ -75,7 +75,7 @@ function M.setup_plugins()
   --[[ Configure any other settings in opts ]]
   local opts = {  -- See the following reference for more available options
     root = M.bundlepath, -- directory where plugins will be installed
-    lockfile = M.bundlepath .. "/../plugins/stable-lock.json", -- generate lockfile for version control which used to track the latest list of stable-running plugins
+    lockfile = vim.fn.stdpath("config") .. "/lua/plugins/stable-lock.json", -- generate lockfile for version control which used to track the latest list of stable-running plugins
     install = { colorscheme = { (vim.g.colors_name or "habamax") } }, -- try to load one of these colorschemes when starting an installation during startup
     defaults = {
       -- By default, custom plugins will be loaded during startup.
