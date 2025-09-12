@@ -194,31 +194,6 @@ hi Error gui=None guifg=#ffffff guibg=#ff0000 cterm=None
 hi Todo gui=None guifg=#0000ff guibg=#ff8c00 cterm=None
 
 
-" ---------------------- highlight for ME -----------------------
-function! s:color_index2rgb(idx)
-  let idx = a:idx
-  " 0-15 ansi colors:
-  if idx < 16
-    return g:terminal_ansi_colors[idx]
-  endif
-  " 232-255 gray colors:
-  if idx >= 232
-    let gray = 8 + (idx - 232) * 10
-    return printf('#%02x%02x%02x', gray, gray, gray)
-  endif
-  " 16-231 6x6x6 cube:
-  let idx = idx - 16
-  let r = idx / 36
-  let g = (idx % 36) / 6
-  let b = idx % 6
-  let map = [0, 95, 135, 175, 215, 255]
-  return printf('#%02x%02x%02x', map[r], map[g], map[b])
-endfun
-" ## cterm 256 colors View ##
-for num_col in range(256)
-  exec "hi ColorView".num_col." ctermfg=0 ctermbg=".num_col." guifg=#000000 guibg=".s:color_index2rgb(num_col)
-endfor
-
 " ---- highlight-groups for group-name with special filetype ----
 " ## vim ##
 "

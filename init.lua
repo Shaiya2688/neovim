@@ -4,3 +4,4 @@
 require("config.options-core")
 require("config.plugin-setup")
 require("config.keymaps")
+require("config.autocmds")

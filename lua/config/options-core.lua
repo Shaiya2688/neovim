@@ -4,6 +4,7 @@
 --[[ Default Preferences ]]
 vim.g.mapleader = '\\'  -- Set defalut <Leader> for keymap
 vim.g.maplocalleader = '\\' -- Set defalut <LocalLeader> for keymap
+vim.g.have_nerd_fonts = false -- Use Nerd Fonts will make Neovim look more stylish, config to 'true' only after you have installed the Nerd Fonts
 
 
 --[[ Default Options for the Colors & Fonts & Cursor Shapes ]]
@@ -58,7 +59,7 @@ vim.opt.pumblend = 10 -- Enables pseudo-transparency for the Popup-Menu blend (0
 vim.opt.pumheight = 10 -- Maximum number of entries in a popup
 
 -- Diff options
-vim.opt.diffopt = { "filler", "context:10", "vertical", "foldcolumn:1" }
+vim.opt.diffopt = { "filler", "context:10", "vertical", "foldcolumn:1", "closeoff" }
 
 -- Fold options
 vim.opt.foldcolumn = "0" -- Disable draw the foldcolumn
