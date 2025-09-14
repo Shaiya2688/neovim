@@ -25,10 +25,7 @@ function M.setup()
   -- Bootstrap lazy.nvim
   if not uv.fs_stat(lazypath) then
     vim.api.nvim_echo({
-      {
-        "Cloning lazy.nvim\n\n",
-        "DiagnosticInfo",
-      },
+      { "Cloning lazy.nvim\n\n", "DiagnosticInfo" },
     }, true, {})
     local lazyrepo = "https://github.com/folke/lazy.nvim.git"
     local ok, out = pcall(vim.fn.system, {

@@ -246,12 +246,12 @@ endfunc
 " ----------------------------- VIM common settings End -------------------------------
 
 " ----------------------------- vim-plug Plugin Manager Start -----------------------------
-if !filereadable(expand('~/.config/nvim/vimrc/bundle/vim-plug/plug.vim'))
-	call system('git clone https://github.com/junegunn/vim-plug ~/.config/nvim/vimrc/bundle/vim-plug')
+if !filereadable(expand('~/.config/nvim/bundle/vim-plug/vim-plug/plug.vim'))
+	call system('git clone https://github.com/junegunn/vim-plug ~/.config/nvim/bundle/vim-plug/vim-plug')
 endif
-if filereadable(expand('~/.config/nvim/vimrc/bundle/vim-plug/plug.vim'))
-	so ~/.config/nvim/vimrc/bundle/vim-plug/plug.vim
-	call plug#begin('~/.config/nvim/vimrc/bundle')
+if filereadable(expand('~/.config/nvim/bundle/vim-plug/vim-plug/plug.vim'))
+	so ~/.config/nvim/bundle/vim-plug/vim-plug/plug.vim
+	call plug#begin('~/.config/nvim/bundle/vim-plug')
 	Plug 'junegunn/vim-plug'	"vim-plug, more information: https://github.com/junegunn/vim-plug
 	" Plug 'yianwillis/vimcdoc'	"vim cn help doc
 	Plug 'flazz/vim-colorschemes'	"colorschemes resources can be referenced

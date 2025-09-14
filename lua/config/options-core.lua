@@ -103,7 +103,7 @@ vim.opt.wildchar = vim.fn.char2nr("\t") -- Set <Tab> as 'wildchar'
 
 -- Combination Key detection
 vim.opt.timeout = true
-vim.opt.timeoutlen = 300  -- Decrease wait time to wait for a mapped key sequence to complete
+vim.opt.timeoutlen = 500  -- Decrease wait time to wait for a mapped key sequence to complete
 vim.opt.ttimeout = true
 vim.opt.ttimeoutlen = 50  -- Decrease wait time to wait for a key code sequence to complete
 

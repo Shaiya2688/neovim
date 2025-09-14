@@ -1,7 +1,5 @@
 -- loading some useful features based on the vim script
--- vim.cmd([[source init.vimrc.vim]])
+vim.cmd.source(vim.fn.stdpath('config') .. '/init.vimrc.vim')
 
-require("config.options-core")
-require("config.keymaps")
-require("config.autocmds")
-require("config.plugin-setup")
+-- loading configs based on the lua script
+require("config")
