@@ -86,7 +86,12 @@ function M.setup_plugins()
     -- automatically check for plugin updates
     checker = {
       enabled = true, -- check for plugin updates periodically
-      notify = false, -- notify on update
+      notify = false, -- get a notification when new updates are found
+    },
+    -- automatically check for config file changes and reload the ui
+    change_detection = {
+        enabled = true,
+        notify = false, -- get a notification when changes are found
     },
     performance = {
       rtp = {
@@ -109,6 +114,13 @@ function M.setup_plugins()
     return
   end
   require("lazy").setup(spec, opts)
+end
+
+function M.open()
+  if not M.is_ready then
+    return
+  end
+  vim.cmd('Lazy')
 end
 
 M.setup()

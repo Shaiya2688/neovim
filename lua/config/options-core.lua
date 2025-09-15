@@ -4,7 +4,9 @@
 --[[ Default Preferences ]]
 vim.g.mapleader = '\\'  -- Set defalut <Leader> for keymap
 vim.g.maplocalleader = '\\' -- Set defalut <LocalLeader> for keymap
-vim.g.have_nerd_fonts = false -- Use Nerd Fonts will make Neovim look more stylish, config to 'true' only after you have installed the Nerd Fonts
+vim.g.have_nerd_fonts = true  -- Use Nerd Fonts will make Neovim look more stylish, config to 'true' only after you have installed and select the Nerd Fonts for your terminal, or using 'guifont' for your gui Neovim
+                              -- The Nerd Font(v3.0 or greater) can download from website: https://www.nerdfonts.com/, you can use the current font name to match the one that suits you best.
+vim.g.specially_utilized_window = { "help", "terminal", "Trouble", "qf", "edgy" } -- When opening files, don't use windows containing these filetypes or buftypes
 
 
 --[[ Default Options for the Colors & Fonts & Cursor Shapes ]]
@@ -16,6 +18,11 @@ end
 -- vim.cmd.colorscheme('shaiya-' .. ((vim.opt.background:get() == 'light' and 'light') or 'dark'))  -- Using the builtin colorscheme
 vim.cmd.colorscheme('shaiya-light') -- Current dark colorscheme unsupported
 vim.cmd('syntax on')  -- Enable syntax highlighting
+if vim.g.have_nerd_fonts and vim.fn.has('gui_running') then
+  -- For gui, you can set guifont option to select the Nerd Fonts
+  -- TODO: new default config:
+  vim.opt.guifont = "JetBrainsMono_Nerd_Font:h11"  -- Default fonts for me: wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/DejaVuSansMono.zip
+end
 vim.opt.guicursor = { "n-v-c-i-ci-ve:ver25",
   "sm:block-blinkwait175-blinkoff150-blinkon175",
   "r-cr:hor20",
@@ -24,15 +31,13 @@ vim.opt.guicursor = { "n-v-c-i-ci-ve:ver25",
 }
 
 --[[ Default Options for the Encoding & Language ]]
--- "file encode setting
--- set encoding=utf-8
--- set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
--- if v:lang =~ "utf8$" || v:lang =~ "utf-8$"
---   set fencs=utf-8,ucs-bom,latin1
--- endif
--- "file format setting for <EOL> define
--- set fileformat=unix
--- set fileformats=unix,dos
+vim.opt.encoding = "utf-8" -- String-encoding used internally
+-- vim.opt.fileencodings = { "utf-8", "ucs-bom", "shift-jis", "gb18030", "gbk", "gb2312", "cp936" }
+if vim.v.lang:lower():match('utf8$') or vim.v.lang:lower():match('utf%-8$') then
+  vim.opt.fileencodings = { "utf-8", "ucs-bom", "default", "latin1" }
+end
+vim.opt.fileformat = "unix" -- Set format of <EOL> for Neovim starts up with an empty buffer
+vim.opt.fileformats = { "unix", "dos" } -- Use 'unix' when buffer's fileformat detection failed
 vim.opt.helplang = { "cn", "en" }
 
 

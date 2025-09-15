@@ -17,6 +17,11 @@ local utils = require("config.utils")
   vim.keymap.set('n', '[%%', '<Plug>(MatchitNormalMultiBackward)'
 ]]
 
+--[[ Maps for Plugin Manager ]]
+vim.keymap.set('n', '<C-F9>', require("config.plugin-setup").open_plugin_manager, { desc = "Open Plugin Manager" })
+vim.keymap.set('n', '<F33>', require("config.plugin-setup").open_plugin_manager, { desc = "Open Plugin Manager" })  -- <C-F9> will be converted to <F33> if Neovim is not under gui running
+
+
 --[[ Maps for Syntax Highlight ]]
 vim.keymap.set('n', '<Leader>h', utils.hl.show_synstack, { desc = "Show Syntax Stack Under Cursor" })
 
@@ -49,10 +54,12 @@ vim.keymap.set('n', '<S-A-Down>', "<C-w>-", { desc = "Decrease Window Height" })
 
 --[[ Maps for multiple Tab Pages ]]
 -- New tab page
-vim.keymap.set('n', '<Leader><Tab>', "<Cmd>tabnew<Cr>", { desc = "New Tab Page" })
+-- Create a tab page using <C-w> + 't'
+vim.keymap.set('n', '<C-w><C-t>', "<Cmd>tabnew<Cr>", { desc = "New Tab Page" })
+vim.keymap.set('n', '<C-w>t', "<Cmd>tabnew<Cr>", { desc = "New Tab Page" })
 -- Switch to next/previous tab page using gt/gT or <C-S-Down>/<C-S-Up>
--- Switch to last accesed tab page using g<Tab>
 -- switch to the specified tab page using {number}gt or {number}<C-S-Down>
+-- Switch to last accesed tab page using g<Tab>
 -- Move tab page
 vim.keymap.set('n', '>', "<Cmd>silent! +tabmove<Cr>", { desc = "Move Tab Page to Right" })
 vim.keymap.set('n', '<', "<Cmd>silent! -tabmove<Cr>", { desc = "Move Tab Page to Left" })

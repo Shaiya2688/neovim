@@ -1,10 +1,11 @@
 local utils = require("config.utils")
 
 return {
+
   -- Adds git related signs to the gutter, as well as utilities for managing changes
   {
     "lewis6991/gitsigns.nvim",
-    -- See `:help gitsigns` to understand what the configuration keys do
+    -- See `:h gitsigns` to understand what the configuration keys do
     event = "VeryLazy",
     opts = {
       signs = {
@@ -178,4 +179,5 @@ return {
 
   -- TODO git log(gl), and hunk fold (ghf)
   -- vim.keymap.set('n', 'gl', "<Cmd>Gitsigns toggle_signs<Cr>", { buffer = buffer, desc = "Git Log" })
+
 }
