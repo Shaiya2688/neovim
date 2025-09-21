@@ -7,7 +7,7 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",  -- for backend utilities, such as scanning the filesystem
       "MunifTanjim/nui.nvim",   -- for all ui components, including the tree
-      vim.g.have_nerd_fonts and "nvim-tree/nvim-web-devicons" or nil, -- optional for file icons
+      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_fonts },  -- optional for getting pretty icons, but requires a Nerd Font.
     },
     lazy = true,
     cmd = "Neotree",
