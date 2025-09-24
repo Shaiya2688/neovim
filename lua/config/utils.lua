@@ -60,6 +60,88 @@ function M.file.remove_dir(path)
 end
 
 
+M.file.persist_var_file = vim.fn.stdpath('data') .. '/persist_var.json'
+M.file.persist_var_max_records = 100
+
+-- Load persist variables
+function M.file.load_persist_vars()
+  local fd = io.open(M.file.persist_var_file, 'r')
+  if not fd then
+    return {}
+  end
+
+  local ok, obj = pcall(vim.json.decode, fd:read('*a'))
+  fd:close()
+  if ok and type(obj) == 'table' then
+    return obj
+  end
+
+  return {}
+end
+
+-- Save persist variables
+function M.file.save_persist_vars(vars)
+  local cache = {}
+
+  -- sort by timestamp and retain only the latest records
+  for name, var in pairs(vars) do
+    table.insert(cache, { name = name, value = var.value, ts = var.ts })
+  end
+  table.sort(cache, function(a, b) return a.ts < b.ts end)
+  while #cache > M.file.persist_var_max_records do
+    table.remove(cache, 1)
+  end
+
+  -- obj: table, { [var_name] = { value = any, ts = number } }
+  local obj = {}
+  for _, v in ipairs(cache) do
+    obj[v.name] = { value = v.value, ts = v.ts }
+  end
+
+  local fd, err = io.open(M.file.persist_var_file, 'w')
+  if not fd then
+    vim.notify(err, vim.log.levels.ERROR)
+    return nil, err
+  end
+  fd:write(vim.json.encode(obj))
+  fd:close()
+  return true
+end
+
+-- Set or delete persist variable
+function M.file.set_persist_var(name, value)
+  if type(name) ~= 'string' or name == '' then
+    return nil, "[utils.file.set_var] variable name invalid"
+  end
+
+  local vars = M.file.load_persist_vars()
+  if value == nil then
+    vars[name] = nil
+  else
+    vars[name] = { value = value, ts = os.time() }
+  end
+  M.file.save_persist_vars(vars)
+
+  return true
+end
+
+-- Get persist variable
+function M.file.get_persist_var(name, default)
+  if type(name) ~= 'string' or name == '' then
+    return default, "[utils.file.set_var] variable name invalid"
+  end
+
+  local vars = M.file.load_persist_vars()
+  for n, v in pairs(vars) do
+    if n == name then
+      return v.value
+    end
+  end
+
+  return default
+end
+
+
 --[[ Utils for Fold ]]
 M.fold = {}
 
