@@ -21,7 +21,7 @@ vim.cmd('syntax on')  -- Enable syntax highlighting
 if vim.g.have_nerd_fonts and vim.fn.has('gui_running') then
   -- For gui, you can set guifont option to select the Nerd Fonts
   -- TODO: new default config:
-  vim.opt.guifont = "JetBrainsMono_Nerd_Font:h11"  -- Default fonts for me: wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/DejaVuSansMono.zip
+  vim.opt.guifont = "DejaVuSansM_Nerd_Font_Mono:h11" -- Default fonts for me: wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/DejaVuSansMono.zip
 end
 vim.opt.guicursor = { "n-v-c-i-ci-ve:ver25",
   "sm:block-blinkwait175-blinkoff150-blinkon175",
