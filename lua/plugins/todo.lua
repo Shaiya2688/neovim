@@ -106,4 +106,5 @@ return {
     },
   },
 
+  -- TODO: n, auto completion, book mark, snippets
 }

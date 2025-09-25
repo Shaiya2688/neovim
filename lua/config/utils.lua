@@ -85,7 +85,9 @@ function M.file.save_persist_vars(vars)
 
   -- sort by timestamp and retain only the latest records
   for name, var in pairs(vars) do
-    table.insert(cache, { name = name, value = var.value, ts = var.ts })
+    if type(name == 'string') and name ~= '' and var.value ~= nil and type(var.ts) == 'number' then
+      table.insert(cache, { name = name, value = var.value, ts = var.ts })
+    end
   end
   table.sort(cache, function(a, b) return a.ts < b.ts end)
   while #cache > M.file.persist_var_max_records do
@@ -115,11 +117,7 @@ function M.file.set_persist_var(name, value)
   end
 
   local vars = M.file.load_persist_vars()
-  if value == nil then
-    vars[name] = nil
-  else
-    vars[name] = { value = value, ts = os.time() }
-  end
+  vars[name] = { value = value, ts = os.time() }
   M.file.save_persist_vars(vars)
 
   return true

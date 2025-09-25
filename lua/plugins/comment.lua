@@ -17,9 +17,27 @@ return {
     end,
     config = function()
       local opts = { noremap = true, silent = true }
-      -- \ca(switch alternative delimiter),\cb(line or selected line comment),\cc(line or selected block comment),\cm(block comment use one /**/),\cu(uncomment),\cA(append comment end of line),\cs(style comment), more see :h nerdcommenter or :map
-      -- vim.keymap.set({"n", "x"}, "gc", "<Plug>NERDCommenterToggle", opts)
-      -- vim.keymap.set("n", "gci", "<Plug>NERDCommenterInvert", opts)
+      -- \cA(switch alternative delimiter)
+	  -- \cb(line or selected line comment)
+	  -- \cc(line or selected block comment)
+	  -- \cm(block comment use one /**/)
+	  -- \cu(uncomment)
+	  -- \ca(append comment end of line)
+	  -- \cs(style comment)
+
+      vim.keymap.set({ 'n', 'x' }, '<Leader>cc', "<Plug>NERDCommenterComment", { desc = "" })
+      vim.keymap.set({ 'n', 'x' }, '<Leader>cb', "<Plug>NERDCommenterAlignBoth", { desc = "" })
+      vim.keymap.set({ 'n', 'x' }, '<Leader>cl', "<Plug>NERDCommenterAlignLeft", { desc = "" })
+      vim.keymap.set({ 'n', 'x' }, '<Leader>cs', "<Plug>NERDCommenterSexy", { desc = "" })
+      vim.keymap.set({ 'n', 'x' }, '<Leader>cm', "<Plug>NERDCommenterMinimal", { desc = "" })
+      vim.keymap.set({ 'n', 'x' }, '<Leader>cy', "<Plug>NERDCommenterYank", { desc = "" })
+      vim.keymap.set({ 'n', 'x' }, '<Leader>cn', "<Plug>NERDCommenterNested", { desc = "" })
+      vim.keymap.set({ 'n', 'x' }, '<Leader>cu', "<Plug>NERDCommenterUncomment", { desc = "" })
+      vim.keymap.set({ 'n', 'x' }, '<Leader>ci', "<Plug>NERDCommenterInvert", { desc = "" })
+      vim.keymap.set({ 'n', 'x' }, '<Leader>c<Space>', "<Plug>NERDCommenterToggle", { desc = "" })
+      vim.keymap.set('n', '<Leader>c$', "<Plug>NERDCommenterToEOL", { desc = "" })
+      vim.keymap.set('n', '<Leader>ca', "<Plug>NERDCommenterAppend", { desc = "" })
+      vim.keymap.set('n', '<Leader>cA', "<Plug>NERDCommenterAltDelims", { desc = "" })
 
     end,
   },
