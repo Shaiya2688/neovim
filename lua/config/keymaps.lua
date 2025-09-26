@@ -47,8 +47,12 @@ vim.keymap.set('n', '<S-A-Left>', "<C-w><", { desc = "Decrease Window Width" })
 vim.keymap.set('n', '<S-A-Right>', "<C-w>>", { desc = "Increase Window Width" })
 vim.keymap.set('n', '<S-A-Up>', "<C-w>+", { desc = "Increase Window Height" })
 vim.keymap.set('n', '<S-A-Down>', "<C-w>-", { desc = "Decrease Window Height" })
--- Create a new window using <C-w> + 'n'
+-- Create a new window Horizontally or Vertically using <C-w> + 'n' or 'N'
+vim.keymap.set('n', '<C-w>n', "<Cmd>new<Cr>", { desc = "New Window (Horizontally)" })
+vim.keymap.set('n', '<C-w>N', "<Cmd>vnew<Cr>", { desc = "New Window (Vertically)" })
 -- Split window Horizontally or Vertically using <C-w> + 's' or 'v'
+vim.keymap.set('n', '<C-w>s', "<Cmd>split<Cr>", { desc = "Split Window (Horizontally)" })
+vim.keymap.set('n', '<C-w>v', "<Cmd>vsplit<Cr>", { desc = "Split Window (Vertically)" })
 -- Exchange window using <C-w> + <C-x>/'H'/'J'/'K'/'L' keys
 
 

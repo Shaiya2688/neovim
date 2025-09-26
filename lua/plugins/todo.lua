@@ -1,13 +1,6 @@
 return {
 
   -- TODO: 1
-  {
-    "nvim-lualine/lualine.nvim",
-	enabled = false,
-  },
-
-
-  -- TODO: 2
   -- Treesitter is a new parser generator tool that we can
   -- use in Neovim to power faster and more accurate
   -- syntax highlighting.
@@ -76,7 +69,7 @@ return {
     },
   },
 
-  -- TODO: 3, "Aerial Symbol Browser",
+  -- TODO: 2, "Aerial Symbol Browser",
   {
     "stevearc/aerial.nvim",
     -- event = "VeryLazy",
@@ -106,5 +99,8 @@ return {
     },
   },
 
+
   -- TODO: n, auto completion, book mark, snippets
+  -- 'nvim-telescope/telescope.nvim',
+  -- 'folke/which-key.nvim',
 }

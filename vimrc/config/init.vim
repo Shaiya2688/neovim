@@ -20,18 +20,6 @@ nmap <silent> <leader>h4 :XtermColorTable<CR>
 "TODO: <C-Fxx>/<S-Fxx>/<A-Fxx> not support in nvim
 nmap <silent> <C-F1> :call HelpCmdInfo()<cr>
 
-
-"file format setting for <EOL> define
-set fileformat=unix
-set fileformats=unix,dos
-
-"file encode setting
-set encoding=utf-8
-set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
-if v:lang =~ "utf8$" || v:lang =~ "utf-8$"
-  set fencs=utf-8,ucs-bom,latin1
-endif
-
 "font setting
 " set guifont=Courier_New:h11:cANSI
 " set guifontwide=新宋体:h11:cGB2312
@@ -296,31 +284,6 @@ endif
 
 au BufNewFile,BufReadPost * call LoadingFileTypeSetting()
 
-"Plug 'inkarkat/vim-mark'
-hi MarkWord1 gui=None guifg=black guibg=#00ffff cterm=None ctermfg=0 ctermbg=14
-hi MarkWord2 gui=None guifg=black guibg=#00ff00 cterm=None ctermfg=0 ctermbg=10
-hi MarkWord3 gui=None guifg=black guibg=#ff0000 cterm=None ctermfg=0 ctermbg=9
-hi MarkWord4 gui=None guifg=black guibg=#ff00ff cterm=None ctermfg=0 ctermbg=13
-hi MarkWord5 gui=None guifg=black guibg=#ff8700 cterm=None ctermfg=0 ctermbg=208
-hi MarkWord6 gui=None guifg=black guibg=#87af00 cterm=None ctermfg=0 ctermbg=106
-hi MarkWord7 gui=None guifg=black guibg=#00afff cterm=None ctermfg=0 ctermbg=39
-hi MarkWord8 gui=None guifg=black guibg=#ffdf87 cterm=None ctermfg=0 ctermbg=222
-hi MarkWord9 gui=None guifg=black guibg=#af5fff cterm=None ctermfg=0 ctermbg=135
-hi MarkWord10 gui=None guifg=black guibg=#dfafdf cterm=None ctermfg=0 ctermbg=182
-hi MarkWord11 gui=None guifg=black guibg=#87ffaf cterm=None ctermfg=0 ctermbg=121
-hi MarkWord12 gui=None guifg=black guibg=#87afff cterm=None ctermfg=0 ctermbg=111
-hi MarkWord13 gui=None guifg=black guibg=#008700 cterm=None ctermfg=0 ctermbg=28
-hi MarkWord14 gui=None guifg=black guibg=#5f5fff cterm=None ctermfg=0 ctermbg=63
-hi MarkWord15 gui=bold guifg=white guibg=#800000 cterm=bold ctermfg=255 ctermbg=1
-hi MarkWord16 gui=bold guifg=white guibg=#008000 cterm=bold ctermfg=255 ctermbg=2
-hi MarkWord17 gui=bold guifg=white guibg=#808000 cterm=bold ctermfg=255 ctermbg=3
-hi MarkWord18 gui=bold guifg=white guibg=#000080 cterm=bold ctermfg=255 ctermbg=4
-hi MarkWord19 gui=bold guifg=white guibg=#800080 cterm=bold ctermfg=255 ctermbg=5
-hi MarkWord20 gui=bold guifg=white guibg=#008080 cterm=bold ctermfg=255 ctermbg=6
-"to add more in this order....
-"use \m or \r to mark and unmark, use \/ or \? to search
-nmap <silent> <leader>c :MarkClear<cr>
-
 "Plug 'Shaiya2688/bracket-highlight'
 let g:rainbow_active = 0 "command is :RainbowToggle
 nmap <silent> <leader>5 :RainbowToggle<cr>
@@ -433,73 +396,6 @@ let g:tagbar_previewwin_pos = 'bo'
 nmap <silent> , :call TagbarToggleSingleWin()<cr>
 autocmd BufEnter * call TagbarAutoUpdate() "fix tagbar not auto update
 
-"Plug 'scrooloose/nerdtree'
-autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
-autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | call feedkeys(":q\<cr>") | endif
-" autocmd BufEnter * if &buftype != 'quickfix' && getcmdwintype() == '' | silent NERDTreeMirror | endif
-" autocmd BufEnter * if winnr() == winnr('h') && bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-    " \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
-let NERDTreeWinPos='right'
-let NERDTreeWinSize=48
-let NERDTreeShowLineNumbers=0
-let NERDTreeShowBookmarks=1
-let g:NERDTreeDirArrowExpandable = '▸'
-let g:NERDTreeDirArrowCollapsible = '▾'
-"replace with NERDTreeTabsToggle to manager for all tabs
-nmap <silent> . :NERDTreeToggle<CR>
-"
-" toggle NERDTree in current tab and match the state in all other tabs
-" func! NERDTreeToggleAllTabs()
-"   if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
-"       " tabdo doesn't preserve current tab - save it and restore it afterwards
-"       let current_tab = tabpagenr()
-"       tabdo silent NERDTreeClose
-"       exe 'tabn ' . current_tab
-"   else
-"       " call s:NERDTreeOpenAllTabs()
-"       NERDTreeToggle
-"       " force focus to NERDTree in current tab
-"       " wincmd p
-"       if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
-"           exe bufwinnr(t:NERDTreeBufName) . "wincmd w"
-"       endif
-"   endif
-" endfun
-" nmap <silent> . :call NERDTreeToggleAllTabs()<cr>
-
-
-"Plug 'jistr/vim-nerdtree-tabs'
-" map <silent> . <plug>NERDTreeTabsToggle<CR>
-"use NERDTreeTabsToggle to manager for all tabs
-" map <silent> <leader>. <plug>NERDTreeFocusToggle<CR>
-
-"Plug 'Xuyuanp/nerdtree-git-plugin'
-let g:NERDTreeGitStatusEnable = 0 "default enable set
-let g:NERDTreeGitStatusPorcelainVersion = 1	"set to 1 if git --version < v2.11.0
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-    \ "Modified"  : "✹",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "✖",
-    \ "Dirty"     : "✗",
-    \ "Clean"     : "✔︎",
-    \ 'Ignored'   : '☒',
-    \ "Unknown"   : "?"
-    \ }
-
-"Plug 'scrooloose/nerdcommenter'
-"\ca(switch alternative delimiter),\cb(line or selected line comment),\cc(line or selected block comment),\cm(block comment use one /**/),\cu(uncomment),\cA(append comment end of line),\cs(style comment), more see :h nerdcommenter or :map
-let g:NERDSpaceDelims = 1				" Add spaces after comment delimiters by default
-let g:NERDCompactSexyComs = 1			" Use compact syntax for prettified multi-line comments
-let g:NERDDefaultAlign = 'both' 		" Align line-wise comment delimiters flush left instead of following code indentation
-let g:NERDTrimTrailingWhitespace = 1	" Enable trimming of trailing whitespace when uncommenting
-let g:NERDToggleCheckAllLines = 1		" Enable NERDCommenterToggle(\c<space>) to check all selected lines is commented or not
-let NERDLPlace="/*"						" Specifies what to use as the left delimiter placeholder when nesting comments.
-let NERDRPlace="*/"						" Specifies what to use as the left delimiter placeholder when nesting comments.
 
 "Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 ":AirlineExtensions can list extensions of supported and current loaded
@@ -593,39 +489,7 @@ let g:ctrlp_types = ['mru', 'buf', 'fil']	"<c-b>/<c-f>/<c-up>/<c-down> switch se
 " let g:ctrlp_reuse_window = 'netrw\|help\|quickfix'
 
 "Plug 'airblade/vim-gitgutter' | Plug 'tpope/vim-fugitive'
-let g:gitgutter_enabled = 1
-" let g:gitgutter_preview_win_floating = 1
-nmap <silent> git :GitGutterToggle<cr>
-nmap <silent> gs :GitGutterLineHighlightsToggle<cr>
-nmap <silent> gd :call JumpStack_DoJump('GitGutterQuickFix')<cr>
-nmap <silent> gv :Gdiff<cr>
-nmap <silent> gb :Git blame<cr>
 nmap <silent> gl :call JumpStack_DoJump('Gllog')<cr>
-nmap <silent> gp <Plug>(GitGutterPrevHunk)
-nmap <silent> gn <Plug>(GitGutterNextHunk)
-nmap <silent> ghp <Plug>(GitGutterPreviewHunk)
-nmap <silent> ghs <Plug>(GitGutterStageHunk)
-nmap <silent> ghu <Plug>(GitGutterUndoHunk)
-nmap <silent> ghf :GitGutterFold<cr>
-let g:gitgutter_sign_added              = '+'
-let g:gitgutter_sign_modified           = '~'
-let g:gitgutter_sign_removed            = '_'
-let g:gitgutter_sign_removed_first_line = '='
-let g:gitgutter_sign_modified_removed   = '~_'
-if &bg == "dark"
-	echoh WarningMsg | echo "GitGutter: please add color settings for dark colorscheme" | echoh None
-else
-	hi GitGutterAdd guifg=#a3e29e guibg=#a3e29e ctermfg=157 ctermbg=157
-	hi GitGutterAddLine guibg=#d9ffcd ctermbg=194
-	hi GitGutterChange guifg=#c3d6e8 guibg=#c3d6e8 ctermfg=153 ctermbg=153
-	hi GitGutterChangeLine guibg=#c3d6e8 ctermbg=153
-	hi GitGutterDelete guifg=#ff0000 guibg=NONE ctermfg=9 ctermbg=NONE
-	hi GitGutterDeleteLine gui=None cterm=None
-	hi link GitGutterChangeDelete GitGutterChange
-	hi link GitGutterChangeDeleteLine GitGutterChangeLine
-	hi diffAdded guifg=#008000 ctermfg=28
-	hi diffRemoved guifg=#ff0000 ctermfg=1
-endif
 
 "Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<c-k>"	"<tab>/<c-i> be used to insert a \t character

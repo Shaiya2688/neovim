@@ -82,6 +82,7 @@ return {
         window = {
           mappings = {
             ["."] = 'close_window',
+            ["bd"] = "none", -- conflicts with the default key mapping 'b'
           },
         },
       },
