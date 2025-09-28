@@ -1,3 +1,4 @@
+local utils = _utils
 local M = {
   bundlepath = vim.fn.stdpath("config") .. "/bundle/lazy",
   is_ready = false,
@@ -14,7 +15,7 @@ function M.setup()
       M.is_ready = true
       return
     else
-      local ok, out = require("config.utils").file.remove_dir(lazypath)
+      local ok, out = utils.file.remove_dir(lazypath)
       vim.api.nvim_echo({
         { ("Find invalid lazy from: %s, start re-install\n"):format(lazypath), "WarningMsg" },
         { vim.trim((ok and "") or (out or "")), "WarningMsg" },

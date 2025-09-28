@@ -1,4 +1,4 @@
-local utils = require("config.utils")
+local utils = _utils
 local augroup_id = vim.api.nvim_create_augroup("UserCustom", { clear = true })
 -- Add any additional autocmds or remove existing autocmds here
 
@@ -9,6 +9,20 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
     if vim.opt.buftype:get() == 'terminal' and vim.fn.mode() == 'n' then
       vim.cmd("startinsert")
     end
+  end,
+})
+
+-- Only highlight cursorline under active window
+vim.api.nvim_create_autocmd({ 'WinEnter', 'BufEnter' }, {
+  group = augroup_id,
+  callback = function()
+    vim.wo.cursorline = true
+  end,
+})
+vim.api.nvim_create_autocmd('WinLeave', {
+  group = augroup_id,
+  callback = function()
+    vim.wo.cursorline = false
   end,
 })
 

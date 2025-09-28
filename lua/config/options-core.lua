@@ -1,3 +1,4 @@
+local utils = _utils
 -- Core options are loaded before plugin setup
 -- Add any basic options here
 
@@ -6,7 +7,14 @@ vim.g.mapleader = '\\'  -- Set defalut <Leader> for keymap
 vim.g.maplocalleader = '\\' -- Set defalut <LocalLeader> for keymap
 vim.g.have_nerd_fonts = true  -- Use Nerd Fonts will make Neovim look more stylish, config to 'true' only after you have installed and select the Nerd Fonts for your terminal, or using 'guifont' for your gui Neovim
                               -- The Nerd Font(v3.0 or greater) can download from website: https://www.nerdfonts.com/, you can use the current font name to match the one that suits you best.
-vim.g.specially_utilized_window = { "help", "terminal", "Trouble", "qf", "edgy" } -- When opening files, don't use windows containing these filetypes or buftypes
+vim.g.specially_utilized_window = { -- When opening files, don't use windows containing these filetypes or buftypes
+  fts = { "help", "terminal", "Trouble", "qf", "edgy", "neo-tree" },
+  bts = { "help", "terminal", "quickfix", },
+}
+vim.g.specially_hidden_window = {   -- When showing which windows, buffers or files are opened, these filetypes or buftypes are hidden
+  fts = { 'neo-tree', 'qf' },
+  bts = { 'nofile', 'prompt', 'quickfix' },
+}
 
 
 --[[ Default Options for the Colors & Fonts & Cursor Shapes ]]
@@ -18,10 +26,13 @@ end
 -- vim.cmd.colorscheme('shaiya-' .. ((vim.opt.background:get() == 'light' and 'light') or 'dark'))  -- Using the builtin colorscheme
 vim.cmd.colorscheme('shaiya-light') -- Current dark colorscheme unsupported
 vim.cmd('syntax on')  -- Enable syntax highlighting
-if vim.g.have_nerd_fonts and vim.fn.has('gui_running') then
-  -- For gui, you can set guifont option to select the Nerd Fonts
-  -- TODO: new default config:
-  vim.opt.guifont = "DejaVuSansM_Nerd_Font_Mono:h11" -- Default fonts for me: wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/DejaVuSansMono.zip
+if vim.g.have_nerd_fonts then
+  vim.opt.ambiwidth = "single"  -- Possible values: 'single', 'double'
+  if vim.fn.has('gui_running') then
+    -- For gui, you can set guifont option to select the Nerd Fonts
+    -- TODO: new default config:
+    vim.opt.guifont = "DejaVuSansM_Nerd_Font_Mono:h11" -- Default fonts for me: wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/DejaVuSansMono.zip
+  end
 end
 vim.opt.guicursor = { "n-v-c-i-ci-ve:ver25",
   "sm:block-blinkwait175-blinkoff150-blinkon175",
@@ -29,6 +40,7 @@ vim.opt.guicursor = { "n-v-c-i-ci-ve:ver25",
   "o:hor50",
   "a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor"
 }
+
 
 --[[ Default Options for the Encoding & Language ]]
 vim.opt.encoding = "utf-8" -- String-encoding used internally
@@ -43,7 +55,7 @@ vim.opt.helplang = { "cn", "en" }
 
 --[[ Default Options for the View ]]
 vim.opt.number = true -- Show line numbers
-vim.opt.relativenumber = false -- Disable relative line numbers
+vim.opt.relativenumber = true -- Enable relative line numbers
 vim.opt.wrap = false -- Disable line wrap
 vim.opt.linebreak = true -- Wrap lines at convenient points if wrap option is enabled
 vim.opt.breakindent = false -- Don't auto indent for break line if wrap option is enabled
@@ -108,7 +120,7 @@ vim.opt.wildchar = vim.fn.char2nr("\t") -- Set <Tab> as 'wildchar'
 
 -- Combination Key detection
 vim.opt.timeout = true
-vim.opt.timeoutlen = 500  -- Decrease wait time to wait for a mapped key sequence to complete
+vim.opt.timeoutlen = 850  -- Decrease wait time to wait for a mapped key sequence to complete
 vim.opt.ttimeout = true
 vim.opt.ttimeoutlen = 50  -- Decrease wait time to wait for a key code sequence to complete
 

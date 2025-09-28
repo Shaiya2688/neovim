@@ -410,6 +410,32 @@ function M.hl.show_synstack()
 end
 
 
+--[[ Utils for Misc ]]
+M.misc = {}
+
+M.misc.merge_unique = function(a, b)
+  local seen = {}
+  local out = {}
+
+  local function add_once(v)
+    if seen[v] then return end
+    seen[v] = true
+    out[#out + 1] = v
+  end
+
+  for _, v in ipairs(a) do add_once(v) end
+  for _, v in ipairs(b) do add_once(v) end
+
+  return out
+end
+
+local a = {nil, 1, 2, 3, print, {x=1}}
+local b = {3, 4, print, {x=1}, function() end}
+
+vim.g.test = M.misc.merge_unique(a, b)
+
+
+
 M.setup()
 
 return M

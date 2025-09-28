@@ -1,3 +1,5 @@
+local utils = _utils
+
 return {
 
   -- Supports for file explorer, which based on filesystem, buffers and other tree like structures
@@ -39,7 +41,7 @@ return {
           { source = "document_symbols", display_name = " Symbols " },
         },
       },
-      open_files_do_not_replace_types = vim.g.specially_utilized_window or { "terminal", "Trouble", "qf", "edgy" }, -- when opening files, do not use windows containing these filetypes or buftypes
+      open_files_do_not_replace_types = utils.misc.merge_unique(vim.g.specially_utilized_window.fts, vim.g.specially_utilized_window.bts) or {}, -- when opening files, do not use windows containing these filetypes or buftypes
       close_if_last_window = true, -- Close Neo-tree if it is the last window left in the tab
       enable_git_status = true,
       window = {

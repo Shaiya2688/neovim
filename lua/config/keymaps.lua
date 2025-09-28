@@ -1,21 +1,5 @@
-local utils = require("config.utils")
+local utils = _utils
 -- Add any keymaps here
-
---[[
-  Adds a new mapping. Examples:
-  -- Map to a Lua function:
-  vim.keymap.set('n', 'lhs', function() print("real lua function") end)
-  -- Map to multiple modes:
-  vim.keymap.set({'n', 'v'}, '<leader>lr', vim.lsp.buf.references, { buffer = true })
-  -- Buffer-local mapping:
-  vim.keymap.set('n', '<leader>w', "<cmd>w<cr>", { silent = true, buffer = 5 })
-  -- Expr mapping:
-  vim.keymap.set('i', '<Tab>', function()
-  return vim.fn.pumvisible() == 1 and "<C-n>" or "<Tab>"
-  end, { expr = true })
-  -- <Plug> mapping:
-  vim.keymap.set('n', '[%%', '<Plug>(MatchitNormalMultiBackward)'
-]]
 
 --[[ Maps for Plugin Manager ]]
 vim.keymap.set('n', '<C-F9>', require("config.plugin-setup").open_plugin_manager, { desc = "Open Plugin Manager" })
@@ -198,41 +182,16 @@ nn <silent> <c-f> :call JumpStack_Next()<cr>
 set autochdir "$PWD is auto change to directory of jump
 
 
-	nmap <silent> <F9> :PlugStatus<cr>
-	nmap <silent> <C-F9> :PlugInstall<cr>
-	nmap <silent> <S-F9> :PlugUpdate<cr>
-	nmap <silent> <A-F9> :PlugClean<cr>
+nmap <silent> <F9> :PlugStatus<cr>
+nmap <silent> <C-F9> :PlugInstall<cr>
+nmap <silent> <S-F9> :PlugUpdate<cr>
+nmap <silent> <A-F9> :PlugClean<cr>
 
 au BufNewFile,BufReadPost * call LoadingFileTypeSetting()
 
 
-"Plug 'inkarkat/vim-mark'
-hi MarkWord1 gui=None guifg=black guibg=#00ffff cterm=None ctermfg=0 ctermbg=14
-hi MarkWord2 gui=None guifg=black guibg=#00ff00 cterm=None ctermfg=0 ctermbg=10
-hi MarkWord3 gui=None guifg=black guibg=#ff0000 cterm=None ctermfg=0 ctermbg=9
-hi MarkWord4 gui=None guifg=black guibg=#ff00ff cterm=None ctermfg=0 ctermbg=13
-hi MarkWord5 gui=None guifg=black guibg=#ff8700 cterm=None ctermfg=0 ctermbg=208
-hi MarkWord6 gui=None guifg=black guibg=#87af00 cterm=None ctermfg=0 ctermbg=106
-hi MarkWord7 gui=None guifg=black guibg=#00afff cterm=None ctermfg=0 ctermbg=39
-hi MarkWord8 gui=None guifg=black guibg=#ffdf87 cterm=None ctermfg=0 ctermbg=222
-hi MarkWord9 gui=None guifg=black guibg=#af5fff cterm=None ctermfg=0 ctermbg=135
-hi MarkWord10 gui=None guifg=black guibg=#dfafdf cterm=None ctermfg=0 ctermbg=182
-hi MarkWord11 gui=None guifg=black guibg=#87ffaf cterm=None ctermfg=0 ctermbg=121
-hi MarkWord12 gui=None guifg=black guibg=#87afff cterm=None ctermfg=0 ctermbg=111
-hi MarkWord13 gui=None guifg=black guibg=#008700 cterm=None ctermfg=0 ctermbg=28
-hi MarkWord14 gui=None guifg=black guibg=#5f5fff cterm=None ctermfg=0 ctermbg=63
-hi MarkWord15 gui=bold guifg=white guibg=#800000 cterm=bold ctermfg=255 ctermbg=1
-hi MarkWord16 gui=bold guifg=white guibg=#008000 cterm=bold ctermfg=255 ctermbg=2
-hi MarkWord17 gui=bold guifg=white guibg=#808000 cterm=bold ctermfg=255 ctermbg=3
-hi MarkWord18 gui=bold guifg=white guibg=#000080 cterm=bold ctermfg=255 ctermbg=4
-hi MarkWord19 gui=bold guifg=white guibg=#800080 cterm=bold ctermfg=255 ctermbg=5
-hi MarkWord20 gui=bold guifg=white guibg=#008080 cterm=bold ctermfg=255 ctermbg=6
-"to add more in this order....
-"use \m or \r to mark and unmark, use \/ or \? to search
-nmap <silent> <leader>c :MarkClear<cr>
 nmap <silent> <leader>5 :RainbowToggle<cr>
 nmap <silent> , :call TagbarToggleSingleWin()<cr>
-nmap <silent> . :NERDTreeToggle<CR>
 
 "Plug 'ctrlpvim/ctrlp.vim' <c-p>? for help
 let g:ctrlp_map = '<c-p>'
@@ -240,38 +199,6 @@ let g:ctrlp_map = '<c-p>'
 "Plug 'airblade/vim-gitgutter' | Plug 'tpope/vim-fugitive'
 let g:gitgutter_enabled = 1
 " let g:gitgutter_preview_win_floating = 1
-nmap <silent> git :GitGutterToggle<cr>
-nmap <silent> gs :GitGutterLineHighlightsToggle<cr>
-nmap <silent> gd :call JumpStack_DoJump('GitGutterQuickFix')<cr>
-nmap <silent> gv :Gdiff<cr>
-nmap <silent> gb :Git blame<cr>
-nmap <silent> gl :call JumpStack_DoJump('Gllog')<cr>
-nmap <silent> gp <Plug>(GitGutterPrevHunk)
-nmap <silent> gn <Plug>(GitGutterNextHunk)
-nmap <silent> ghp <Plug>(GitGutterPreviewHunk)
-nmap <silent> ghs <Plug>(GitGutterStageHunk)
-nmap <silent> ghu <Plug>(GitGutterUndoHunk)
-nmap <silent> ghf :GitGutterFold<cr>
-set updatetime=100
-let g:gitgutter_sign_added              = '+'
-let g:gitgutter_sign_modified           = '~'
-let g:gitgutter_sign_removed            = '_'
-let g:gitgutter_sign_removed_first_line = '='
-let g:gitgutter_sign_modified_removed   = '~_'
-if &bg == "dark"
-	echoh WarningMsg | echo "GitGutter: please add color settings for dark colorscheme" | echoh None
-else
-	hi GitGutterAdd guifg=#a3e29e guibg=#a3e29e ctermfg=157 ctermbg=157
-	hi GitGutterAddLine guibg=#d9ffcd ctermbg=194
-	hi GitGutterChange guifg=#c3d6e8 guibg=#c3d6e8 ctermfg=153 ctermbg=153
-	hi GitGutterChangeLine guibg=#c3d6e8 ctermbg=153
-	hi GitGutterDelete guifg=#ff0000 guibg=NONE ctermfg=9 ctermbg=NONE
-	hi GitGutterDeleteLine gui=None cterm=None
-	hi link GitGutterChangeDelete GitGutterChange
-	hi link GitGutterChangeDeleteLine GitGutterChangeLine
-	hi diffAdded guifg=#008000 ctermfg=28
-	hi diffRemoved guifg=#ff0000 ctermfg=1
-endif
 
 nmap <silent> <S-F8> :SrcExplToggle<cr>
 let g:SrcExpl_prevDefKey = "<S-F5>"    "Set \"<S-F5>\" key for displaying the previous definition in the jump list

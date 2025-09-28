@@ -1,69 +1,82 @@
+local using_bufferline_as_tabline = false -- TODO: Try using bufferline
+local lualine_builtin_theme = function()
+  local colors = {
+    darkgray  = '#303030',
+    gray      = '#D0D0D0',
+    black     = '#202020',
+    white     = '#E0E0E0',
+    green     = '#80c918', -- '#00C918'
+    brown     = '#FD8900',
+    purple    = '#CD00DD', --'#AD00A1'
+    blue      = '#3797E6', -- '#3777E7'
+    pink      = '#FF0086', -- Magenta
+  }
+  return {
+    normal = {
+      a = { fg = colors.black, bg = colors.green, gui = 'bold' },
+      b = { fg = colors.white, bg = colors.darkgray },
+      c = { fg = colors.brown, bg = colors.black },
+    },
+    visual = {
+      a = { fg = colors.black, bg = colors.purple, gui = 'bold' },
+      b = { fg = colors.white, bg = colors.darkgray },
+      c = { fg = colors.brown, bg = colors.black },
+    },
+    insert = {
+      a = { fg = colors.black, bg = colors.blue, gui = 'bold' },
+      b = { fg = colors.white, bg = colors.darkgray },
+      c = { fg = colors.brown, bg = colors.black },
+    },
+    replace = {
+      a = { fg = colors.black, bg = colors.pink, gui = 'bold' },
+      b = { fg = colors.white, bg = colors.darkgray },
+      c = { fg = colors.brown, bg = colors.black },
+    },
+    inactive = {
+      a = { fg = colors.gray, bg = colors.black, gui = 'bold' },
+      b = { fg = colors.gray, bg = colors.black },
+      c = { fg = colors.gray, bg = colors.black },
+    },
+    command = {
+      a = { fg = colors.black, bg = colors.green, gui = 'bold' },
+      b = { fg = colors.white, bg = colors.darkgray },
+      c = { fg = colors.brown, bg = colors.black },
+    },
+    terminal = {
+      a = { fg = colors.black, bg = colors.green, gui = 'bold' },
+      b = { fg = colors.white, bg = colors.darkgray },
+      c = { fg = colors.brown, bg = colors.black },
+    },
+  }
+end
+
+local lualine_on_click_file = function(num, key)
+  if key ==  'l' then
+    local fname = num == 1 and vim.fn.expand('%:p:~') or vim.fn.expand('%:p')
+    if fname ~= '' then
+      vim.notify(fname, vim.log.levels.INFO)
+      -- TODO: sync to system clipbords
+    end
+  end
+end
+
 return {
 
   {
-
     -- Enhance and style the statusline and tabline
     "nvim-lualine/lualine.nvim",
     -- See `:h lualine` for more help information
     dependencies = {
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_fonts },  -- optional for getting pretty icons, but requires a Nerd Font.
     },
+    init = function()
+      vim.o.laststatus = 3  -- Force lualine using global statusline if lualine enabled
+    end,
     opts = function()
-      local builtin_theme = function()
-        local colors = {
-          darkgray  = '#303030',
-          gray      = '#D0D0D0',
-          black     = '#202020',
-          white     = '#E0E0E0',
-          green     = '#00C918',
-          brown     = '#FD8900',
-          -- darkbrown = "#cc6633",
-          purple    = '#AD00A1',
-          blue      = '#3777E6',
-          pink      = '#FF0086', -- Magenta
-        }
-        return {
-          normal = {
-            a = { fg = colors.black, bg = colors.green, gui = 'bold' },
-            b = { fg = colors.white, bg = colors.darkgray },
-            c = { fg = colors.brown, bg = colors.black },
-          },
-          visual = {
-            a = { fg = colors.black, bg = colors.purple, gui = 'bold' },
-            b = { fg = colors.white, bg = colors.darkgray },
-            c = { fg = colors.brown, bg = colors.black },
-          },
-          insert = {
-            a = { fg = colors.black, bg = colors.blue, gui = 'bold' },
-            b = { fg = colors.white, bg = colors.darkgray },
-            c = { fg = colors.brown, bg = colors.black },
-          },
-          replace = {
-            a = { fg = colors.black, bg = colors.pink, gui = 'bold' },
-            b = { fg = colors.white, bg = colors.darkgray },
-            c = { fg = colors.brown, bg = colors.black },
-          },
-          inactive = {
-            a = { fg = colors.gray, bg = colors.black, gui = 'bold' },
-            b = { fg = colors.gray, bg = colors.black },
-            c = { fg = colors.gray, bg = colors.black },
-          },
-          command = {
-            a = { fg = colors.black, bg = colors.green, gui = 'bold' },
-            b = { fg = colors.white, bg = colors.darkgray },
-            c = { fg = colors.brown, bg = colors.black },
-          },
-          terminal = {
-            a = { fg = colors.black, bg = colors.green, gui = 'bold' },
-            b = { fg = colors.white, bg = colors.darkgray },
-            c = { fg = colors.brown, bg = colors.black },
-          },
-        }
-      end
-      local theme_name = builtin_theme -- All available themes are listed in lualine's THEMES.md, e.g. 'gruvbox', 'powerline' .etc
+      local theme_name = lualine_builtin_theme -- All available themes are listed in lualine's THEMES.md, e.g. 'gruvbox', 'powerline' .etc
       local opts = {
         options = {
-          theme = theme_name, -- lualine theme
+          theme = theme_name,
           icons_enabled = vim.g.have_nerd_fonts,
           globalstatus = vim.o.laststatus == 3, -- enable global statusline (have a single statusline at bottom of neovim instead of one for every window).
           always_show_tabline = true, -- If you have configured lualine for displaying tabline then tabline will always show
@@ -93,15 +106,11 @@ return {
           -- +-------------------------------------------------+
           -- | A | B | C                             X | Y | Z |
           -- +-------------------------------------------------+
-          section_separators = vim.g.have_nerd_fonts and { left = '', right = '' } or { left = ' ', right = ' '},
+          section_separators = vim.g.have_nerd_fonts and { left = '', right = ' ' } or { left = ' ', right = ' '},
           component_separators = { left = '', right = '' },
           always_divide_middle = true, -- Left sections i.e. 'a','b' and 'c' can't take over the entire statusline even if neither of 'x', 'y' or 'z' are present
         },
-        sections = {
-          -- `buffers` (shows currently available buffers)
-          -- `tabs` (shows currently available tabs)
-          -- `windows` (shows currently available windows)
-          -- `lsp_status` (shows active LSPs in the current buffer and a progress spinner)
+        sections = { -- Enable statusline
           lualine_a = {'mode'},
           lualine_b = {
             {
@@ -136,15 +145,7 @@ return {
               },
               separator = ' ',
               color = theme_name == 'auto' and { fg='#ffa500', gui="nocombine,bold" } or { gui="nocombine,bold" },
-              on_click = function(num, key)
-                if key ==  'l' then
-                  local fname = num == 1 and vim.fn.expand('%:p:~') or vim.fn.expand('%:p')
-                  if fname ~= '' then
-                    vim.notify(fname, vim.log.levels.INFO)
-                    -- TODO: sync to system clipbords
-                  end
-                end
-              end,
+              on_click = lualine_on_click_file,
             },
             {
               function()
@@ -153,6 +154,7 @@ return {
                 return ftime
               end,
               color = theme_name == 'auto' and { fg='#ffa500', gui="nocombine,bold" } or { gui="nocombine,bold" },
+              on_click = lualine_on_click_file,
             },
           },
           lualine_x = {
@@ -169,14 +171,16 @@ return {
                 --   info  = 'DiagnosticInfo',
                 --   hint  = 'DiagnosticHint',
               },
-              -- 󰅚 󰀪 󰋽 󰌶
-              --    󰌵
               symbols = vim.g.have_nerd_fonts and {
+                error = '',  -- 󰅚
+                warn  = '',  -- 󰀪
+                info  = '',  -- 󰋽
+                hint  = '󰌶',  -- 󰌵,
               } or {
-                error = 'E',
-                warn = 'W',
-                info = 'I',
-                hint = 'H',
+                error = 'E:',
+                warn = 'W:',
+                info = 'I:',
+                hint = 'H:',
               },
               colored = true,           -- Displays diagnostics status in color
               update_in_insert = false, -- Update diagnostics in insert mode.
@@ -286,13 +290,85 @@ return {
             },
           },
         },
-        tabline = {},
-        winbar = {},
-        inactive_winbar = {},
-        -- extensions = { "neo-tree", "lazy", "fzf" },
-        extensions = {},
+        tabline = using_bufferline_as_tabline and {} or { -- Enable tabline
+          lualine_a = {
+            {
+              'windows',
+              show_filename_only = true,   -- Shows shortened relative path when set to false.
+              show_modified_status = true, -- Shows indicator when the window is modified.
+              symbols = {
+                modified = '[+]',  -- Text to show when the file is modified.
+              },
+              mode = 2, -- 0: Shows window name, 1: Shows window index, 2: Shows window name + window index
+              max_length = vim.o.columns * 2 / 3, -- Maximum width of windows component, it can also be a function that returns the value of `max_length` dynamically.
+              filetype_names = { -- Shows specific window name for specific filetypes
+                TelescopePrompt = 'Telescope',
+                dashboard = 'Dashboard',
+                packer = 'Packer',
+                fzf = 'FZF',
+                alpha = 'Alpha'
+              },
+              disabled_buftypes = vim.g.specially_hidden_window.bts or {}, -- Hide a window if its buffer's type is disabled
+              use_mode_colors = true, -- Automatically updates active window color to match color of other components (will be overidden if windows_color is set)
+              windows_color = {
+                -- active = 'lualine_a_normal',     -- Color for active window.
+                -- inactive = 'lualine_a_inactive', -- Color for inactive window.
+              },
+            },
+          },
+          lualine_z = {
+            {
+              function()
+                return "tabs"
+              end,
+              separator = { left = '', right = vim.g.have_nerd_fonts and '' or '' },
+              color = { fg='#D0D0D0', bg='#404040', gui="nocombine,bold" }
+            },
+            {
+              'tabs',
+              tab_max_length = 40,  -- Maximum width of each tab. The content will be shorten dynamically (example: apple/orange -> a/orange)
+              max_length = vim.o.columns / 3, -- Maximum width of tabs component, it can also be a function that returns the value of `max_length` dynamically.
+              mode = 2, -- 0: Shows tab_nr, 1: Shows tab_name, 2: Shows tab_nr + tab_name
+              path = 0, -- 0: just shows the filename, 1: shows the relative path and shorten $HOME to ~, 2: shows the full path, 3: shows the full path and shorten $HOME to ~
+              section_separators = { left = '', right = '' },
+              component_separators = { left = '', right = '' },
+              use_mode_colors = true, -- Automatically updates active window color to match color of other components (will be overidden if tabs_color is set)
+              tabs_color = {
+                -- active = 'lualine_z_normal',     -- Color for active tab.
+                -- inactive = 'lualine_z_inactive', -- Color for inactive tab.
+              },
+              show_modified_status = true,  -- Shows a symbol next to the tab name if the file has been modified.
+              symbols = {
+                modified = '[+]',  -- Text to show when the file is modified.
+              },
+              -- fmt = function(name, context) -- Format tab_name
+              --   local buflist = vim.fn.tabpagebuflist(context.tabnr)
+              --   local winnr = vim.fn.tabpagewinnr(context.tabnr)
+              --   local bufnr = buflist[winnr]
+              --   local mod = vim.fn.getbufvar(bufnr, '&mod')
+              --   return name .. (mod == 1 and ' +' or '')
+              -- end
+            },
+          },
+        },
+        winbar = {}, inactive_winbar = {}, -- Disable winbar for active and inactive windows
+        extensions = {}, -- Disable lualine extensions, which are used to change statusline appearance for specified filetypes, e.g. { "neo-tree", "lazy", "fzf", "quickfix" }
       }
       return opts
+    end,
+    config = function(_, opts)
+      local ok, lualine = pcall(require, 'lualine')
+      if not ok then return end
+      lualine.setup(opts)
+      if using_bufferline_as_tabline then return end
+      vim.keymap.set('n', '<Leader>tr', function()
+        if not vim.fn.exists('*LualineRenameTab') then return end
+        vim.ui.input({ prompt = "> New tabname: " }, function(name)
+          if name == nil then return end
+          vim.cmd('echo ""')
+          vim.fn.execute('LualineRenameTab ' .. name)
+        end)
+      end, { desc = "Rename or Reset The Tab Name" })
     end
   },
 
