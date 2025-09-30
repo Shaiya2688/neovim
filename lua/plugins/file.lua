@@ -53,12 +53,12 @@ return {
                              -- "sibling": Insert nodes  as siblings of the directory under cursor.
         mappings = {
           ["."] = 'close_window',
-          ["h"] = "open_split",
           ["v"] = "open_vsplit",
+          -- ["h"] = "open_split",
+          ["s"] = "open_split",
+          ["S"] = "none",
           -- ["<cr>"] = "open_drop",
           -- ["t"] = "open_tab_drop",
-          ["s"] = "none",
-          ["S"] = "none",
           ["<C-f>"] = "next_source",
           ["<C-b>"] = "prev_source",
           -- ["<"] = "none",

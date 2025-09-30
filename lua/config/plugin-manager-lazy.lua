@@ -69,6 +69,11 @@ function M.setup_plugins()
     -- import/override with your plugins
     { import = "plugins" },
   }
+  -- Import plugins from the first-level sub dirs under the "plugins/"
+  for _, subdir in ipairs(vim.fn.glob(vim.fn.stdpath("config") .. "/lua/plugins/*/", 0, 1)) do
+    local name = vim.fn.fnamemodify(subdir:gsub("/$", ""), ":t")
+    table.insert(spec, { import = "plugins." .. name })
+  end
 
   --[[ Configure any other settings in opts ]]
   local opts = {  -- See the following reference for more available options

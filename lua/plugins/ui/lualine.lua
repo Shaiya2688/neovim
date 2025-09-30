@@ -1,4 +1,4 @@
-local using_bufferline_as_tabline = false -- TODO: Try using bufferline
+local utils = _utils
 local lualine_builtin_theme = function()
   local colors = {
     darkgray  = '#303030',
@@ -290,33 +290,8 @@ return {
             },
           },
         },
-        tabline = using_bufferline_as_tabline and {} or { -- Enable tabline
+        tabline = vim.g.tabline ~= 'lualine' and {} or { -- Enable tabline for tabs + wins
           lualine_a = {
-            {
-              'windows',
-              show_filename_only = true,   -- Shows shortened relative path when set to false.
-              show_modified_status = true, -- Shows indicator when the window is modified.
-              symbols = {
-                modified = '[+]',  -- Text to show when the file is modified.
-              },
-              mode = 2, -- 0: Shows window name, 1: Shows window index, 2: Shows window name + window index
-              max_length = vim.o.columns * 2 / 3, -- Maximum width of windows component, it can also be a function that returns the value of `max_length` dynamically.
-              filetype_names = { -- Shows specific window name for specific filetypes
-                TelescopePrompt = 'Telescope',
-                dashboard = 'Dashboard',
-                packer = 'Packer',
-                fzf = 'FZF',
-                alpha = 'Alpha'
-              },
-              disabled_buftypes = vim.g.specially_hidden_window.bts or {}, -- Hide a window if its buffer's type is disabled
-              use_mode_colors = true, -- Automatically updates active window color to match color of other components (will be overidden if windows_color is set)
-              windows_color = {
-                -- active = 'lualine_a_normal',     -- Color for active window.
-                -- inactive = 'lualine_a_inactive', -- Color for inactive window.
-              },
-            },
-          },
-          lualine_z = {
             {
               function()
                 return "tabs"
@@ -327,11 +302,11 @@ return {
             {
               'tabs',
               tab_max_length = 40,  -- Maximum width of each tab. The content will be shorten dynamically (example: apple/orange -> a/orange)
-              max_length = vim.o.columns / 3, -- Maximum width of tabs component, it can also be a function that returns the value of `max_length` dynamically.
+              max_length = vim.o.columns * 17 / 30, -- Maximum width of tabs component, it can also be a function that returns the value of `max_length` dynamically.
               mode = 2, -- 0: Shows tab_nr, 1: Shows tab_name, 2: Shows tab_nr + tab_name
               path = 0, -- 0: just shows the filename, 1: shows the relative path and shorten $HOME to ~, 2: shows the full path, 3: shows the full path and shorten $HOME to ~
-              section_separators = { left = '', right = '' },
-              component_separators = { left = '', right = '' },
+              section_separators = { left = '', right = '' },
+              component_separators = { left = '', right = '' },
               use_mode_colors = true, -- Automatically updates active window color to match color of other components (will be overidden if tabs_color is set)
               tabs_color = {
                 -- active = 'lualine_z_normal',     -- Color for active tab.
@@ -350,6 +325,40 @@ return {
               -- end
             },
           },
+          lualine_z = {
+            {
+              function()
+                return "wins"
+              end,
+              separator = { left = '', right = vim.g.have_nerd_fonts and '' or '' },
+              color = { fg='#D0D0D0', bg='#404040', gui="nocombine,bold" }
+            },
+            {
+              'windows',
+              section_separators = { left = '', right = '' },
+              component_separators = { left = '', right = '' },
+              show_filename_only = true,   -- Shows shortened relative path when set to false.
+              show_modified_status = true, -- Shows indicator when the window is modified.
+              symbols = {
+                modified = '[+]',  -- Text to show when the file is modified.
+              },
+              mode = 2, -- 0: Shows window name, 1: Shows window index, 2: Shows window name + window index
+              max_length = vim.o.columns * 1 / 3, -- Maximum width of windows component, it can also be a function that returns the value of `max_length` dynamically.
+              filetype_names = { -- Shows specific window name for specific filetypes
+                TelescopePrompt = 'Telescope',
+                dashboard = 'Dashboard',
+                packer = 'Packer',
+                fzf = 'FZF',
+                alpha = 'Alpha'
+              },
+              disabled_buftypes = vim.g.specially_hidden_window.bts or {}, -- Hide a window if its buffer's type is disabled
+              use_mode_colors = true, -- Automatically updates active window color to match color of other components (will be overidden if windows_color is set)
+              windows_color = {
+                -- active = 'lualine_a_normal',     -- Color for active window.
+                -- inactive = 'lualine_a_inactive', -- Color for inactive window.
+              },
+            },
+          },
         },
         winbar = {}, inactive_winbar = {}, -- Disable winbar for active and inactive windows
         extensions = {}, -- Disable lualine extensions, which are used to change statusline appearance for specified filetypes, e.g. { "neo-tree", "lazy", "fzf", "quickfix" }
@@ -360,14 +369,13 @@ return {
       local ok, lualine = pcall(require, 'lualine')
       if not ok then return end
       lualine.setup(opts)
-      if using_bufferline_as_tabline then return end
+      if vim.g.tabline ~= 'lualine' then return end
       vim.keymap.set('n', '<Leader>tr', function()
         if not vim.fn.exists('*LualineRenameTab') then return end
-        vim.ui.input({ prompt = "> New tabname: " }, function(name)
-          if name == nil then return end
-          vim.cmd('echo ""')
+        local name = utils.ui.input("> New tabname: ")
+        if name then
           vim.fn.execute('LualineRenameTab ' .. name)
-        end)
+        end
       end, { desc = "Rename or Reset The Tab Name" })
     end
   },

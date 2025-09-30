@@ -32,6 +32,18 @@ function M.ui.new_win_buf(ui_entry)
   return find_new(old_win, new_win), find_new(old_buf, new_buf)
 end
 
+-- Get input from user, it might be an empty string if nothing was entered, or `nil` if the user aborted the dialog
+function M.ui.input(prompt)
+  local input = nil
+  vim.ui.input({ prompt = prompt }, function(pattern)
+    input = pattern
+  end)
+  if input ~= nil then
+    vim.cmd('echo ""')
+  end
+  return input
+end
+
 
 --[[ Utils for Mouse ]]
 M.mouse = {}

@@ -87,6 +87,7 @@ vim.opt.foldenable = true
 
 --[[ Default Options for the Search ]]
 vim.opt.hlsearch = true
+vim.opt.incsearch = true  -- Show where the pattern while typing a search pattern
 vim.opt.ignorecase = true -- Ignoring character case for search patterns
 vim.opt.smartcase = false -- Don't overwrite ignore case with capitals
 

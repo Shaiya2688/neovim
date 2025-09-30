@@ -45,7 +45,9 @@ vim.keymap.set('n', '<C-w>v', "<Cmd>vsplit<Cr>", { desc = "Split Window (Vertica
 -- Create a tab page using <C-w> + 't'
 vim.keymap.set('n', '<C-w><C-t>', "<Cmd>tabnew<Cr>", { desc = "New Tab Page" })
 vim.keymap.set('n', '<C-w>t', "<Cmd>tabnew<Cr>", { desc = "New Tab Page" })
--- Switch to next/previous tab page using gt/gT or <C-S-Down>/<C-S-Up>
+-- Switch to next/previous tab page using gt/gT or <C-S-Down>/<C-S-Up> or ]t/[t
+vim.keymap.set('n', '[t', "<Cmd>tabprevious<Cr>", { desc = "Prev Tab Page" })
+vim.keymap.set('n', ']t', "<Cmd>tabnext<Cr>", { desc = "Next Tab Page" })
 -- switch to the specified tab page using {number}gt or {number}<C-S-Down>
 -- Switch to last accesed tab page using g<Tab>
 -- Move tab page

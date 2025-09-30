@@ -22,9 +22,8 @@ return {
         if not vim.fn.exists('*mark#GetCount') or (vim.fn['mark#GetCount']() <= 0) then
           vim.notify("No marked words", vim.log.levels.ERROR)
         else
-          local name = vim.fn.input("> Enter save name: ")
-          vim.cmd('echo ""')
-          if name ~= '' then
+          local name = utils.ui.input("> Enter save name: ")
+          if name ~= nil and name ~= '' then
             vim.fn.execute('MarkSave ' .. name)
             if type(vim.g['MARK_' .. name]) == 'string' then
               utils.file.set_persist_var(name, vim.g['MARK_' .. name])
@@ -36,9 +35,8 @@ return {
         end
       end, { desc = "Save Mark Words" })
       vim.keymap.set('n', '<Leader>ml', function()
-        local name = vim.fn.input("> Loading name: ")
-        vim.cmd('echo ""')
-        if name ~= '' then
+        local name = utils.ui.input("> Loading name: ")
+        if name ~= nil and name ~= '' then
           local pattern = utils.file.get_persist_var(name, nil)
           if type(pattern) == 'string' then
             vim.g['MARK_' .. name] = pattern
