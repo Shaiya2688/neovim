@@ -1,4 +1,5 @@
 local utils = _utils
+
 local lualine_builtin_theme = function()
   local colors = {
     darkgray  = '#303030',
@@ -89,8 +90,8 @@ return {
             statusline = 100,
             tabline = 1000,
             winbar = 1000,
-           refresh_time = 16, -- ~60fps the time after which refresh queue is processed. Mininum refreshtime for lualine
-           events = {         -- The auto command events at which lualine refreshes
+            refresh_time = 16, -- ~60fps the time after which refresh queue is processed. Mininum refreshtime for lualine
+            events = {         -- The auto command events at which lualine refreshes
               'WinEnter',
               'BufEnter',
               'BufWritePost',
@@ -302,15 +303,21 @@ return {
             {
               'tabs',
               tab_max_length = 40,  -- Maximum width of each tab. The content will be shorten dynamically (example: apple/orange -> a/orange)
-              max_length = vim.o.columns * 17 / 30, -- Maximum width of tabs component, it can also be a function that returns the value of `max_length` dynamically.
+              max_length = function() -- Maximum width of tabs component, it can also be a function that returns the value of `max_length` dynamically.
+                if vim.g.tabline_show == 0 then
+                  return vim.o.columns * 17 / 30 -- for window actived
+                else
+                  return vim.o.columns * 7 / 30  -- for buffer actived
+                end
+              end,
               mode = 2, -- 0: Shows tab_nr, 1: Shows tab_name, 2: Shows tab_nr + tab_name
               path = 0, -- 0: just shows the filename, 1: shows the relative path and shorten $HOME to ~, 2: shows the full path, 3: shows the full path and shorten $HOME to ~
               section_separators = { left = '', right = '' },
               component_separators = { left = '', right = '' },
               use_mode_colors = true, -- Automatically updates active window color to match color of other components (will be overidden if tabs_color is set)
               tabs_color = {
-                -- active = 'lualine_z_normal',     -- Color for active tab.
-                -- inactive = 'lualine_z_inactive', -- Color for inactive tab.
+                -- active = 'lualine_a_normal',     -- Color for active tab.
+                -- inactive = 'lualine_a_inactive', -- Color for inactive tab.
               },
               show_modified_status = true,  -- Shows a symbol next to the tab name if the file has been modified.
               symbols = {
@@ -328,7 +335,7 @@ return {
           lualine_z = {
             {
               function()
-                return "wins"
+                return vim.g.tabline_show == 0 and "wins" or "bufs"
               end,
               separator = { left = '', right = vim.g.have_nerd_fonts and '' or '' },
               color = { fg='#D0D0D0', bg='#404040', gui="nocombine,bold" }
@@ -354,9 +361,38 @@ return {
               disabled_buftypes = vim.g.specially_hidden_window.bts or {}, -- Hide a window if its buffer's type is disabled
               use_mode_colors = true, -- Automatically updates active window color to match color of other components (will be overidden if windows_color is set)
               windows_color = {
-                -- active = 'lualine_a_normal',     -- Color for active window.
-                -- inactive = 'lualine_a_inactive', -- Color for inactive window.
+                -- active = 'lualine_z_normal',     -- Color for active window.
+                -- inactive = 'lualine_z_inactive', -- Color for inactive window.
               },
+              cond = function() return vim.g.tabline_show == 0 end,
+            },
+            {
+              'buffers',
+              section_separators = { left = '', right = '' },
+              component_separators = { left = '', right = '' },
+              show_filename_only = true,        -- Shows shortened relative path when set to false.
+              hide_filename_extension = false,  -- Hide filename extension when set to true.
+              show_modified_status = true,      -- Shows indicator when the buffer is modified.
+              mode = 4, -- 0: Shows buffer name, 1: Shows buffer index, 2: Shows buffer name + buffer index, 3: Shows buffer number, 4: Shows buffer name + buffer number
+              max_length = vim.o.columns * 2 / 3, -- Maximum width of buffers component, it can also be a function that returns the value of `max_length` dynamically.
+              filetype_names = { -- Shows specific buffer name for specific filetypes
+                TelescopePrompt = 'Telescope',
+                dashboard = 'Dashboard',
+                packer = 'Packer',
+                fzf = 'FZF',
+                alpha = 'Alpha'
+              },
+              use_mode_colors = true, -- Automatically updates active buffer color to match color of other components (will be overidden if buffers_color is set)
+              buffers_color = {
+                -- active = 'lualine_z_normal',     -- Color for active buffer.
+                -- inactive = 'lualine_z_inactive', -- Color for inactive buffer.
+              },
+              symbols = {
+                modified = '[+]',     -- Text to show when the buffer is modified
+                alternate_file = '#', -- Text to show to identify the alternate file
+                directory =  vim.g.have_nerd_fonts and '' or '[D]', -- Text to show when the buffer is a directory
+              },
+              cond = function() return vim.g.tabline_show == 1 end,
             },
           },
         },

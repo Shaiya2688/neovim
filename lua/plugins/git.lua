@@ -164,10 +164,7 @@ return {
       end
 
       -- Reset highlight groups when colorscheme changes
-      vim.api.nvim_create_autocmd("ColorScheme", {
-        group = vim.api.nvim_create_augroup("CustomGitSignsHighlight", { clear = true }),
-        callback = highlight_setup,
-      })
+      utils.hl.on_colorscheme_changed(highlight_setup)
 
       local ok, gs = pcall(require, 'gitsigns')
       if ok then

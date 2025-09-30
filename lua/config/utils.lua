@@ -188,6 +188,7 @@ M.hl = {
     '#000000', '#cd0000', '#00cd00', '#ffaf00', '#5454ff', '#cd00cd',  '#00cdcd', '#d7d7d7',
     '#7f7f7f', '#ff0000', '#00ff00', '#ffff00', '#00afff', '#ff00ff',  '#00ffff', '#ffffff'
   },
+  colorscheme_augroup = vim.api.nvim_create_augroup("UserCustomColorScheme", { clear = true }),
 }
 
 function M.hl.color_index2rgb(idx)
@@ -369,6 +370,18 @@ function M.hl.create_group(name, opts)
     vim.cmd.highlight(hl_cmd)
     return true, "cmd: 'highlight " .. hl_cmd_prev .. "', 'highlight " .. hl_cmd .. "'"
   end
+end
+
+function M.hl.on_colorscheme_changed(fn, builtin_only)
+  vim.api.nvim_create_autocmd("ColorScheme", {
+    group = M.hl.colorscheme_augroup,
+    callback = function(ev)
+      local name = ev.match
+      if not builtin_only or name:match('^shaiya') then
+        vim.defer_fn(fn, 0)
+      end
+    end,
+  })
 end
 
 function M.hl.get_synstack()
