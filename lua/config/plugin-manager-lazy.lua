@@ -114,6 +114,7 @@ function M.setup_plugins()
         },
       },
     },
+    -- TODO: icon for none nerd fonts
   }
 
   if not M.is_ready then

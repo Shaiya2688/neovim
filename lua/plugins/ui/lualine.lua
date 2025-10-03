@@ -61,6 +61,125 @@ local lualine_on_click_file = function(num, key)
   end
 end
 
+-- table to map mode to highlight suffixes
+local lualine_mode_to_highlight = {
+  ['VISUAL'] = '_visual',
+  ['V-BLOCK'] = '_visual',
+  ['V-LINE'] = '_visual',
+  ['SELECT'] = '_visual',
+  ['S-LINE'] = '_visual',
+  ['S-BLOCK'] = '_visual',
+  ['REPLACE'] = '_replace',
+  ['V-REPLACE'] = '_replace',
+  ['INSERT'] = '_insert',
+  ['COMMAND'] = '_command',
+  ['EX'] = '_command',
+  ['MORE'] = '_command',
+  ['CONFIRM'] = '_command',
+  ['TERMINAL'] = '_terminal',
+}
+
+local aerial_status = function(opts)
+  opts = vim.tbl_extend('force', {
+    colored = true,
+    sep = '->',
+    depth = 5,
+    section = 'c',
+  }, opts or {})
+
+  return function()
+    local mode = require('lualine.utils.mode').get_mode()
+    local is_focused = require('lualine.utils.utils').is_focused()
+    local _suffix
+    if is_focused == false then
+      _suffix = '_inactive'
+    else
+      _suffix = lualine_mode_to_highlight[mode] or '_normal'
+    end
+    local base_section = opts.section
+    if base_section >= 'x' then
+      base_section = string.char(string.byte('c') - (string.byte(base_section) - string.byte('x')))
+    end
+    local base_hl_group = ('lualine_%s%s'):format(base_section, _suffix)
+    local base_hl_attr = vim.api.nvim_get_hl(0, { name = base_hl_group, link = false })
+    local function draw_text(hl, text)
+      return string.format('%%#%s#%s%%*', hl, text)
+    end
+
+    local ok, aerial = pcall(require, 'aerial')
+    if ok then
+      local symbols = aerial.get_location(true) or {}
+      if not vim.tbl_isempty(symbols) then
+        local pieces = {}
+        local depth = opts.depth > #symbols and #symbols or opts.depth
+        while #symbols > depth do
+          table.remove(symbols, 1)
+        end
+        for i, sym in ipairs(symbols) do
+          local icon = sym.icon or ''
+          local name = sym.name or ''
+          local kind = sym.kind or 'Undefined'
+          if opts.colored then
+            local hl_group = ('lualine_%s_aerial_%s%s'):format(opts.section, kind, _suffix)
+            if vim.fn.hlexists(hl_group) == 0 then
+              local target = 'Aerial' .. kind .. 'Icon'
+              local target_hl_attr
+              if vim.fn.hlexists(target) == 1 then
+                target_hl_attr = vim.api.nvim_get_hl(0, { name = target, link = false, })
+              elseif vim.fn.hlexists(base_hl_group) == 1 then
+                target_hl_attr = base_hl_attr
+              else
+                target_hl_attr = vim.api.nvim_get_hl(0, { name = 'StatusLine', link = false })
+              end
+              vim.api.nvim_set_hl(0, hl_group, { bg = base_hl_attr.bg, fg = target_hl_attr.fg, bold = true, nocombine = true, })
+            end
+            table.insert(pieces, draw_text(hl_group, string.format('%s%s', icon, name)))
+            if i < depth then
+              table.insert(pieces, draw_text(base_hl_group, string.format(' %s ', opts.sep)))
+            end
+          else
+            table.insert(pieces, string.format('%s%s', icon, name))
+            if i < depth then
+              table.insert(pieces, string.format(' %s ', opts.sep))
+            end
+          end
+        end
+        return table.concat(pieces, '')
+      end
+    end
+    return ''
+  end
+end
+
+ -- Used to override default color for aerial component
+local aerial_color = function(section)
+  local mode = require('lualine.utils.mode').get_mode()
+  local is_focused = require('lualine.utils.utils').is_focused()
+  local _suffix
+  if is_focused == false then
+    _suffix = '_inactive'
+  else
+    _suffix = lualine_mode_to_highlight[mode] or '_normal'
+  end
+  local ok, aerial = pcall(require, 'aerial')
+  if ok then
+    local symbols = aerial.get_location(true) or {}
+    for i, sym in ipairs(symbols) do
+      local hl_group = ('lualine_%s_aerial_LLAerial%s%s'):format(section or 'c', sym.kind, _suffix)
+      local target= ('lualine_%s_aerial_LLAerial%sIcon%s'):format(section or 'c', sym.kind, _suffix)
+      if vim.fn.hlexists(target) == 1 and vim.fn.hlexists(hl_group) == 1 then
+        local attr = vim.api.nvim_get_hl(0, { name = hl_group })
+        local new_attr = vim.api.nvim_get_hl(0, { name = target })
+        if not attr.bold then
+          new_attr.bold = true
+          vim.api.nvim_set_hl(0, hl_group, new_attr)
+        end
+      end
+    end
+  end
+  return { fg='#fd8900', gui="nocombine,bold" } -- Provide default color if 'aerial' requires it in the future
+end
+
 return {
 
   {
@@ -145,7 +264,7 @@ return {
                 newfile = '[New]',     -- Text to show for newly created file before first write
               },
               separator = ' ',
-              color = theme_name == 'auto' and { fg='#ffa500', gui="nocombine,bold" } or { gui="nocombine,bold" },
+              color = theme_name == 'auto' and { fg='#fd8900', gui="nocombine,bold" } or { gui="nocombine,bold" },
               on_click = lualine_on_click_file,
             },
             {
@@ -154,11 +273,31 @@ return {
                 local ftime = vim.fn.filereadable(fname) == 0 and '' or os.date('%Y/%m/%d %H:%M:%S', vim.fn.getftime(fname))
                 return ftime
               end,
-              color = theme_name == 'auto' and { fg='#ffa500', gui="nocombine,bold" } or { gui="nocombine,bold" },
+              color = theme_name == 'auto' and { fg='#fd8900', gui="nocombine,bold" } or { gui="nocombine,bold" },
               on_click = lualine_on_click_file,
             },
           },
           lualine_x = {
+            -- {
+            --   'aerial',
+            --   sep = ' » ', -- The separator to be used to separate symbols in status line
+            --   sep_prefix = false, -- Prefix the separator before the first symbol
+            --   sep_highlight = 'lualine_c_normal', -- The separator highlight group
+            --   sep_icon = '', -- The separator between the icon and the symbol name (when icons are enabled)
+            --   depth = 5, -- The number of symbols to render top-down. In order to render only 'N' last symbols, 'depth = -1' can be used in order to render only current symbol
+            --   dense = false, -- When 'dense' mode is on, only a single icon that represents the kind of current symbol is rendered at the beginning of status line
+            --   dense_sep = '.', -- The separator to be used to separate symbols in dense mode.
+            --   colored = true, -- Color the symbol icons.
+            --   color = function(section)
+            --     pcall(aerial_color, section.section) -- Override default color for aerial component
+            --   end,
+            --   separator = ' ',
+            -- },
+            {
+              aerial_status({ section = 'x', sep = '»', depth = 3, colored = true, }), -- The original 'aerial' status cannot be applied to the lualine theme
+              color = theme_name == 'auto' and { fg='#fd8900', gui="nocombine,bold" } or { gui="nocombine,bold" },
+              separator = ' ',
+            },
             {
               -- TODO: TBD
               'diagnostics',
@@ -202,7 +341,7 @@ return {
           lualine_y = {
             {
               'filetype',
-              color = theme_name == 'auto' and { fg='#ffa500', gui="nocombine,bold" } or { gui="nocombine,bold" },
+              color = theme_name == 'auto' and { fg='#fd8900', gui="nocombine,bold" } or { gui="nocombine,bold" },
               icon_only = false,
               icon = { align = 'right' },
               colored = true, -- Displays filetype icon in color
@@ -270,7 +409,7 @@ return {
                 newfile = '[New]',     -- Text to show for newly created file before first write
               },
               separator = ' ',
-              color = theme_name == 'auto' and { fg='#ffa500', gui="nocombine,bold" } or { gui="nocombine,bold" },
+              color = theme_name == 'auto' and { fg='#fd8900', gui="nocombine,bold" } or { gui="nocombine,bold" },
             },
           },
           lualine_x = {},

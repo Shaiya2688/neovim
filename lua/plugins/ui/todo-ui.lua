@@ -55,4 +55,6 @@ return {
     end,
   },
 
+  -- TODO: "folke/edgy.nvim", "echasnovski/mini.animate"
+
 }

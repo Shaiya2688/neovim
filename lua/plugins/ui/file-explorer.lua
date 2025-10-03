@@ -11,7 +11,6 @@ return {
       "MunifTanjim/nui.nvim",   -- for all ui components, including the tree
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_fonts },  -- optional for getting pretty icons, but requires a Nerd Font.
     },
-    lazy = true,
     cmd = "Neotree",
     keys = {
       { '.', function() require("neo-tree.command").execute({ toggle = true }) end, desc = "Toggle NeoTree File Explorer" },

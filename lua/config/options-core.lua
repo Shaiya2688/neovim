@@ -8,7 +8,7 @@ vim.g.maplocalleader = '\\' -- Set defalut <LocalLeader> for keymap
 vim.g.have_nerd_fonts = true  -- Use Nerd Fonts will make Neovim look more stylish, config to 'true' only after you have installed and select the Nerd Fonts for your terminal, or using 'guifont' for your gui Neovim
                               -- The Nerd Font(v3.0 or greater) can download from website: https://www.nerdfonts.com/, you can use the current font name to match the one that suits you best.
 vim.g.specially_utilized_window = { -- When opening files, don't use windows containing these filetypes or buftypes
-  fts = { "help", "terminal", "Trouble", "qf", "edgy", "neo-tree" },
+  fts = { "help", "terminal", "Trouble", "qf", "edgy", "neo-tree", "aerial", },
   bts = { "help", "terminal", "quickfix", },
 }
 vim.g.specially_hidden_window = {   -- When showing which windows, buffers or files are opened, these filetypes or buftypes are hidden
@@ -81,7 +81,7 @@ vim.opt.diffopt = { "filler", "context:10", "vertical", "foldcolumn:1", "closeof
 -- Fold options
 vim.opt.foldcolumn = "0" -- Disable draw the foldcolumn
 vim.opt.foldlevel = 100
-vim.opt.foldmethod = "syntax"
+vim.opt.foldmethod = "syntax" -- TODO: support foldexpr via tree-sitter
 vim.opt.foldenable = true
 
 
