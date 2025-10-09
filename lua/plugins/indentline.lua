@@ -72,9 +72,9 @@ return {
         animation = function() return 0 end, -- returns wait time (in ms) border drawing step lines, 0 to disable animation
       },
       mappings = {
-        -- type 'vii' / 'vin' in normal mode or 'ii' / 'in' in visual mode to select texts based on the indentation for scope
+        -- type 'vii' / 'vII' in normal mode or 'ii' / 'II' in visual mode to select texts based on the indentation for scope
         object_scope = 'ii',
-        object_scope_with_border = 'in',
+        object_scope_with_border = 'II',
         -- type '[i' or ']i' to jump to respective border line; type 'v[i' or 'v]i' to jump and select texts
         goto_top = '[i',
         goto_bottom = ']i',
@@ -89,13 +89,12 @@ return {
     },
     config = function(_, opts)
       local highlight_setup = function()
-        utils.hl.create_group('MiniIndentscopeSymbol', { gui='nocombine', cterm='nocombine', fg=248, })
+        utils.hl.create_group('MiniIndentscopeSymbol', { target='UserIndentLine', })
       end
-      utils.hl.on_colorscheme_changed(highlight_setup, true) -- Reset highlight groups when colorscheme changes
       local ok, indent = pcall(require, 'mini.indentscope')
       if ok then
         indent.setup(opts)
-        highlight_setup()
+        utils.hl.on_colorscheme_changed(highlight_setup, true) -- Reset highlight groups when colorscheme changes
       end
       vim.api.nvim_create_autocmd("FileType", {
         pattern = vim.g.indentline_exclude_filetypes,

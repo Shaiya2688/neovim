@@ -162,14 +162,10 @@ return {
         utils.hl.create_group('GitSignsAddPreview', { target='UserGitPreviewAdd' })
         utils.hl.create_group('GitSignsDeletePreview', { target='UserGitPreviewRemoved' })
       end
-
-      -- Reset highlight groups when colorscheme changes
-      utils.hl.on_colorscheme_changed(highlight_setup)
-
       local ok, gs = pcall(require, 'gitsigns')
       if ok then
         gs.setup(opts)
-        highlight_setup()
+        utils.hl.on_colorscheme_changed(highlight_setup) -- Reset highlight groups when colorscheme changes
       end
     end
   },

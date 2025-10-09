@@ -1,7 +1,7 @@
 local M = {}
 
 function M.setup(name)
-  M.manager = require("config.plugin-manager-"..name)
+  M.manager = require("config.plugin-manager-" .. name)
   M.manager.setup_plugins()
 end
 

@@ -53,6 +53,7 @@ return {
         ["[["] = "actions.prev_up",
         ["]]"] = "actions.next_up",
         ["q"] = "actions.close",
+        ["<Space>"] = "actions.tree_toggle",
         ["o"] = "actions.tree_toggle",
         ["O"] = "actions.tree_toggle_recursive",
         ["za"] = false,
@@ -95,6 +96,7 @@ return {
       highlight_on_jump = 300, -- When jumping to a symbol, highlight the line for this many ms, set to false to disable
       autojump = false, -- Jump to symbol in source window when the cursor moves
       icons = { -- Custom define symbol icons
+        Collapsed = "+", -- use <Symbol>Collapsed to change icon for specific symbol, e.g. 'FunctionCollapsed', 'StructCollapsed'
       },
       ignore = { -- Control which windows and buffers aerial should ignore when these are focused
         unlisted_buffers = false, -- Ignore unlisted buffers. See :help buflisted

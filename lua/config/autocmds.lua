@@ -86,6 +86,8 @@ utils.hl.on_colorscheme_changed(function()
   utils.hl.create_group('UserGitPreviewAdd', { guifg='#008000', guibg='#d9ffcd', ctermfg=28, ctermbg=194 })
   utils.hl.create_group('UserGitPreviewRemoved', { guifg='#ff0000', guibg='#ffd5cc', ctermfg=1, ctermbg=225 })
 end)
-vim.api.nvim_exec_autocmds('ColorScheme', {})
+utils.hl.on_colorscheme_changed(function()
+  utils.hl.create_group('UserIndentLine', { gui='nocombine', cterm='nocombine', fg=248, })
+end, true)
 
 -- delmarks!			"clear position of a-z marks, m{a-zA-Z} to mark position, `{a-zA-Z} or '{a-zA-Z} to jump assigned position

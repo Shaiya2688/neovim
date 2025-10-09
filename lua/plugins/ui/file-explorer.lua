@@ -105,11 +105,18 @@ return {
           format = "%Y-%m-%d %I:%M:%S", -- format string for timestamp (see `:h os.date()`)
         },
         indent = {
+          indent_size = 2,
+          padding = 1,
+          with_markers = true,
+          indent_marker = "│",
+          last_indent_marker = "└",
+          -- highlight = "NeoTreeIndentMarker",
           with_expanders = nil, -- if nil and file nesting is enabled, will enable expanders
           -- expander_collapsed = vim.g.have_nerd_fonts and "" or "+",
           -- expander_expanded = vim.g.have_nerd_fonts and "" or "-",
           expander_collapsed = "+",
           expander_expanded = "-",
+          -- expander_highlight = "NeoTreeExpander",
         },
         icon = vim.g.have_nerd_fonts and {
           folder_closed = "",

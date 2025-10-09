@@ -2,8 +2,13 @@ local utils = _utils
 -- Add any keymaps here
 
 --[[ Maps for Plugin Manager ]]
-vim.keymap.set('n', '<C-F9>', require("config.plugin-setup").open_plugin_manager, { desc = "Open Plugin Manager" })
-vim.keymap.set('n', '<F33>', require("config.plugin-setup").open_plugin_manager, { desc = "Open Plugin Manager" })  -- <C-F9> will be converted to <F33> if Neovim is not under gui running
+vim.keymap.set('n', '<C-F9>', function()
+  local pms = package.loaded["config.plugin-setup"]
+  if pms then
+    pms.open_plugin_manager()
+  end
+end, { desc = "Open Plugin Manager" })
+vim.keymap.set('n', '<F33>', '<C-F9>', { remap = true, desc = "Open Plugin Manager" })  -- <C-F9> will be converted to <F33> if Neovim is not under gui running
 
 
 --[[ Maps for Syntax Highlight ]]
@@ -16,7 +21,8 @@ vim.keymap.set({'n', 'v'}, '<C-w>m', utils.mouse.mode_toggle, { desc = "Toggle M
 
 
 --[[ Maps for Fold ]]
-vim.keymap.set('n', '<Leader>f', utils.fold.column_toggle, { desc = "Toggle Fold Column" })
+vim.keymap.set('n', 'f<Space>', 'za', { remap = true, desc = "Toggle Fold Under Cursor" })
+vim.keymap.set('n', '<Leader>f<Space>', utils.fold.column_toggle, { desc = "Toggle Fold Column" })
 
 
 --[[ Maps for Window ]]

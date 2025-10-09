@@ -47,10 +47,10 @@ return {
       incremental_selection = { -- Incremental selection based on the named nodes from the grammar tree
         enable = true,
         keymaps = {
-          init_selection = "vnn",    -- In normal mode, start incremental selection
-          node_incremental = "nn",   -- In visual mode, increment to the upper named parent
-          scope_incremental = "ns",  -- In visual mode, increment to the upper bscope
-          node_decremental = "nm",   -- In visual mode, decrement to the previous named node
+          init_selection = "v<Space>",  -- In normal mode, start incremental selection
+          node_incremental = "<Space>", -- In visual mode, increment to the upper named parent
+          scope_incremental = false,    -- In visual mode, increment to the upper bscope
+          node_decremental = "<BS>",    -- In visual mode, decrement to the previous named node
         },
       },
     },
@@ -58,8 +58,9 @@ return {
       local ok, ts = pcall(require, 'nvim-treesitter.configs')
       if ok then
         ts.setup(opts)
-        vim.opt.foldmethod = 'expr'
-        vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+        vim.opt.foldmethod = 'expr' -- Update fold options after treesitter highlight enabled, because legacy syntax highlighting has become inactived
+        -- vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+        vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
       end
     end,
   },
