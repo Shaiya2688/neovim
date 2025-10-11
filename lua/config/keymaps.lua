@@ -69,15 +69,16 @@ vim.keymap.set('n', ']b', "<Cmd>bnext<Cr>", { desc = "Next Buffer" })
 
 --[[ Maps for Buffer contents ]]
 -- Move lines
-vim.keymap.set('n', '<C-Down>', "<Cmd>execute 'move .+' . (v:count1)<Cr>", { desc = "Move Down" })
-vim.keymap.set('n', '<C-Up>', "<Cmd>execute 'move .-' . (v:count1 + 1)<Cr>", { desc = "Move Up" })
-vim.keymap.set('i', '<C-Down>', "<Esc><Cmd>move .+1<Cr>gi", { desc = "Move Down" })
-vim.keymap.set('i', '<C-Up>', "<Esc><Cmd>move .-2<Cr>gi", { desc = "Move Up" })
--- Move selected virsual block
-vim.keymap.set('v', '<C-Down>', ":<C-u>execute \"'<,'>move '>+\" . (v:count1)<Cr>gv", { desc = "Move Down" })
-vim.keymap.set('v', '<C-Up>', ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<Cr>gv", { desc = "Move Up" })
-vim.keymap.set('v', '>', ">gv", { desc = "Move Right" })
-vim.keymap.set('v', '<', "<gv", { desc = "Move Left" })
+vim.keymap.set('n', '<C-Down>', "<Cmd>execute 'move .+' . (v:count1)<Cr>", { desc = "Move Text Lines Down" })
+vim.keymap.set('n', '<C-Up>', "<Cmd>execute 'move .-' . (v:count1 + 1)<Cr>", { desc = "Move Text Lines Up" })
+vim.keymap.set('i', '<C-Down>', "<Esc><Cmd>move .+1<Cr>gi", { desc = "Move Text Lines Down" })
+vim.keymap.set('i', '<C-Up>', "<Esc><Cmd>move .-2<Cr>gi", { desc = "Move Text Lines Up" })
+vim.keymap.set('v', '<C-Down>', ":<C-u>execute \"'<,'>move '>+\" . (v:count1)<Cr>gv", { desc = "Move Text Lines Down" })
+vim.keymap.set('v', '<C-Up>', ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<Cr>gv", { desc = "Move Text Lines Up" })
+-- Move selected virsual text tlines to right/left
+vim.keymap.set('v', '>', ">gv", { desc = "Move Selected Text Lines Right" })
+vim.keymap.set('v', '<', "<gv", { desc = "Move Selected Text Lines Left" })
+-- Scroll the text view to right/left using 'zl'/'zh' or 'zL'/'zH'
 
 
 --[[ Maps for Terminal ]]
