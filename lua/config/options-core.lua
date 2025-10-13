@@ -105,6 +105,8 @@ vim.opt.autowrite = false -- Disable auto write buffer contents to file
 vim.opt.confirm = true    -- Show a dialog to confirm if need save changes before exiting modified buffer
 vim.opt.undofile = false  -- Don't reload undo history on the file next loading
 vim.opt.undolevels = 1000
+vim.opt.swapfile = true   -- Use a swapfile for the buffer
+vim.opt.shortmess:append({ A = true }) -- Don't give the "ATTENTION" message when an existing swap file is found
 
 -- Indent options
 vim.opt.autoindent = false

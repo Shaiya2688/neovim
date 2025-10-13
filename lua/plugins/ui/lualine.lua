@@ -151,7 +151,7 @@ local aerial_status = function(opts)
   end
 end
 
- -- Used to override default color for aerial component
+-- Used to override default color for aerial component
 local aerial_color = function(section)
   local mode = require('lualine.utils.mode').get_mode()
   local is_focused = require('lualine.utils.utils').is_focused()

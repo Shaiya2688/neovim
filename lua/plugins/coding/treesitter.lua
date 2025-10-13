@@ -39,7 +39,7 @@ return {
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = {
-        enable = true,
+        -- enable = true, -- TODO: not friendly to me
         disable = { -- List of language that will be disabled
           'ruby',
         },
