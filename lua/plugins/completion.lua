@@ -5,7 +5,7 @@ return {
   {
     "hrsh7th/nvim-cmp",
     -- See `:h cmp` for more help information
-    event = "VeryLazy",
+    event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
@@ -18,7 +18,8 @@ return {
       -- Global setup.
       cmp.setup({
         completion = {
-          autocomplete = { cmp.TriggerEvent.TextChanged }
+          autocomplete = { cmp.TriggerEvent.TextChanged },
+          keyword_length = 2,
         },
         snippet = {
           expand = function(args)

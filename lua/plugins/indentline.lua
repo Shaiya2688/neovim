@@ -72,9 +72,9 @@ return {
         animation = function() return 0 end, -- returns wait time (in ms) border drawing step lines, 0 to disable animation
       },
       mappings = {
-        -- type 'vii' / 'vII' in normal mode or 'ii' / 'II' in visual mode to select texts based on the indentation for scope
-        object_scope = 'ii',
-        object_scope_with_border = 'II',
+        -- type 'vii' / 'vai' in normal mode or 'ii' / 'ai' in visual mode to select texts based on the indentation for scope
+        object_scope = 'ii', -- inner incremental sections
+        object_scope_with_border = 'ai', -- outer incremental sections
         -- type '[i' or ']i' to jump to respective border line; type 'v[i' or 'v]i' to jump and select texts
         goto_top = '[i',
         goto_bottom = ']i',

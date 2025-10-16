@@ -8,7 +8,7 @@ vim.keymap.set('n', '<C-F9>', function()
     pms.open_plugin_manager()
   end
 end, { desc = "Open Plugin Manager" })
-vim.keymap.set('n', '<F33>', '<C-F9>', { remap = true, desc = "Open Plugin Manager" })  -- <C-F9> will be converted to <F33> if Neovim is not under gui running
+vim.keymap.set('n', '<F33>', "<C-F9>", { remap = true, desc = "Open Plugin Manager" })  -- <C-F9> will be converted to <F33> if Neovim is not under gui running
 
 
 --[[ Maps for Syntax Highlight ]]

@@ -1,3 +1,27 @@
+if true then
+return {
+  -- See `:h lsp` for more help information about Nvim LSP features
+  {
+    'neovim/nvim-lspconfig',
+    -- nvim-lspconfig is a Neovim's official collection of configurations for the Nvim LSP client. See `:h lspconfig` for more help information
+	enabled = false,
+     dependencies = {
+      -- Mason must be loaded before its dependents so we need to set it up here.
+      -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
+      { 'mason-org/mason.nvim', opts = {} }, -- allows you to easily manage external editor tooling such as LSP servers, DAP servers, linters, and formatters
+      { 'mason-org/mason-lspconfig.nvim' }, -- Automatically install LSP servers and related tools (via mason) to stdpath for Neovim
+      'WhoIsSethDaniel/mason-tool-installer.nvim',
+
+      -- Useful status updates for LSP.
+      { 'j-hui/fidget.nvim', opts = {} },
+
+      -- Allows extra capabilities provided by blink.cmp
+      'saghen/blink.cmp',
+    },
+
+  },
+}
+end
 return {
 
   -- LSP Plugins
