@@ -128,6 +128,9 @@ vim.opt.ttimeout = true
 vim.opt.ttimeoutlen = 50  -- Decrease wait time to wait for a key code sequence to complete
 
 
+-- Temporary options for neovim's config written
+vim.opt.tabstop = 2 -- Number of spaces tabs count for
+vim.opt.expandtab = true -- Use <Tab> instead of <Space> for indent
 if true then return {} end
 
 vim.opt.inccommand = 'split'  -- Preview substitutions live, as you type!

@@ -87,7 +87,7 @@ return {
     config = function(_, opts)
       local ok, mti = pcall(require, 'mason-tool-installer')
       if ok then
-        -- Don't setup opts here, mason-tool-installer is needed only when explicitly required
+        -- Don't setup opts here, using mason-tool-installer to automatically install or update only needed when explicitly required
         mti.setup({
           ensure_installed = nil,
           auto_update = false,
@@ -115,11 +115,11 @@ return {
     config = function(_, opts)
       local ok, mlspc = pcall(require, 'mason-lspconfig')
       if ok then
-        -- Don't setup opts here, mason-lspconfig opts is loaded when nvim-lspconfig loads
-        mlspc.setup({
-          ensure_installed = nil,
-          automatic_enable = false,
-        })
+        -- Don't setup here, `mason-lspconfig` loading require `nvim-lspconfig` have available in Neovim's runtimepath
+        -- mlspc.setup({
+        --   ensure_installed = nil,
+        --   automatic_enable = false,
+        -- })
       end
     end,
   },
@@ -141,7 +141,7 @@ return {
       ensure_installed = {}, -- A list of sources to install if they're not already installed.
       automatic_installation = true, -- Run `require("null-ls").setup` will automatically install masons tools based on selected sources in `null-ls`
     },
-    -- Don't setup here, mason-null-ls loading require null-ls has been added to Neovim's rtp
+    -- Don't setup here, `mason-null-ls` loading require `null-ls` have available in Neovim's runtimepath
     config = function() end,
   },
 
@@ -160,7 +160,7 @@ return {
       ensure_installed = {}, -- A list of adapters to install if they're not already installed
       automatic_installation = true, -- Whether adapters that are set up (via dap) should be automatically installed if they're not already installed
     },
-    -- Don't setup here, mason-nvim-dap loading require nvim-dap has been added to Neovim's rtp
+    -- Don't setup here, `mason-nvim-dap` loading require `nvim-dap` have available in Neovim's runtimepath
     config = function() end,
   },
 
