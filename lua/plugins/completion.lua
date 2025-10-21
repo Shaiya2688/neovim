@@ -15,6 +15,29 @@ return {
       local ok, cmp = pcall(require, 'cmp')
       if not ok then return end
 
+      local select_fn = function(forward, behavior) -- popup completion menu or select/insert completion item
+        if behavior ~= cmp.SelectBehavior.Select then
+          behavior = cmp.SelectBehavior.Insert -- default bahavior
+        end
+        return function(fallback)
+          local fn
+          if cmp.visible() then
+            if forward then
+              fn = cmp.mapping.select_next_item({ behavior = behavior })
+            else
+              fn = cmp.mapping.select_prev_item({ behavior = behavior })
+            end
+          else
+            fn = cmp.mapping.complete()
+          end
+          if type(fn) == 'function' then
+            fn(fallback)
+          else
+            fallback()
+          end
+        end
+      end
+
       -- Global setup.
       cmp.setup({
         completion = {
@@ -40,28 +63,16 @@ return {
           -- completion = cmp.config.window.bordered(),
           -- documentation = cmp.config.window.bordered(),
         },
-        mapping = cmp.mapping.preset.insert({ -- overried preset mapping
-          ['<C-n>'] = function() -- popup completion menu or insert next item
-            if cmp.visible() then
-              cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
-            else
-              cmp.complete()
-            end
-          end,
-          ['<C-p>'] = function() -- popup completion menu or insert prev item
-            if cmp.visible() then
-              cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
-            else
-              cmp.complete()
-            end
-          end,
+        mapping = {
+          ['<C-n>'] = select_fn(true, cmp.SelectBehavior.Insert), -- popup completion menu or insert next item
+          ['<C-p>'] = select_fn(false, cmp.SelectBehavior.Insert), -- popup completion menu or insert prev item
           ['<DOWN>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), -- select next item
           ['<UP>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), -- select prev item
           ['<CR>'] = cmp.mapping.confirm({ select = true }), -- insert selected item
           ['<C-e>'] = cmp.mapping.abort(), -- closes the completion menu and restore inserted texts
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-        }),
+        },
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
           { name = 'path' },
@@ -86,46 +97,33 @@ return {
       })
 
       -- `/` cmdline setup.
+      -- FIXME: command mode key map cause <Tab> unworking under `:` cmdline, using key self to create one key mapping as a fallback key
+      local mapself = function(keys)
+        local keyself = function(key)
+          k = vim.api.nvim_replace_termcodes(key, true, true, true)
+          vim.api.nvim_feedkeys(k, "nt", false)
+        end
+        for _, key in ipairs(keys) do
+          vim.keymap.set('c', key, function() keyself(key) end, { silent = false, } )
+        end
+      end
+      mapself({ '<Tab>', '<S-Tab>', '<C-n>', '<C-p>', '<DOWN>', '<UP>', '<C-e>' })
       cmp.setup.cmdline('/', {
         completion = {
           autocomplete = false, -- Don't trigger autocompletion, only invoked by mapped key manually
         },
-        mapping = cmp.mapping.preset.cmdline({ -- overried preset mapping
+        mapping = {
           ['<Tab>'] = { -- popup completion menu or insert next item
-            c = function()
-              if cmp.visible() then
-                cmp.select_next_item()
-              else
-                cmp.complete()
-              end
-            end,
+            c = select_fn(true, cmp.SelectBehavior.Insert),
           },
           ['<S-Tab>'] = { -- popup completion menu or insert prev item
-            c = function()
-              if cmp.visible() then
-                cmp.select_prev_item()
-              else
-                cmp.complete()
-              end
-            end,
+            c = select_fn(false, cmp.SelectBehavior.Insert),
           },
           ['<C-n>'] = { -- popup completion menu or insert next item
-            c = function()
-              if cmp.visible() then
-                cmp.select_next_item()
-              else
-                cmp.complete()
-              end
-            end,
+            c = select_fn(true, cmp.SelectBehavior.Insert),
           },
           ['<C-p>'] = { -- popup completion menu or insert prev item
-            c = function()
-              if cmp.visible() then
-                cmp.select_prev_item()
-              else
-                cmp.complete()
-              end
-            end,
+            c = select_fn(false, cmp.SelectBehavior.Insert),
           },
           ['<DOWN>'] = { -- select and insert next item
             c = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
@@ -136,7 +134,7 @@ return {
           ['<C-e>'] = { -- closes the completion menu and restore inserted texts
             c = cmp.mapping.abort(),
           },
-        }),
+        },
         sources = {
           { name = 'buffer' },
         },

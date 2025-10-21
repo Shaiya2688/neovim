@@ -12,7 +12,8 @@ vim.keymap.set('n', '<F33>', "<C-F9>", { remap = true, desc = "Open Plugin Manag
 
 
 --[[ Maps for Syntax Highlight ]]
-vim.keymap.set('n', '<Leader>h', utils.hl.show_synstack, { desc = "Show Syntax Stack Under Cursor" })
+-- vim.keymap.set('n', '<Leader>h', utils.hl.show_synstack, { desc = "Show Syntax Stack Under Cursor" })
+vim.keymap.set('n', '<Leader>h', "<Cmd>Inspect<Cr>", { desc = "Show Syntax Stack Under Cursor" })
 
 
 --[[ Maps for Mouse Modes ]]

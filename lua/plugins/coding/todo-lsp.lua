@@ -1,6 +1,6 @@
 if true then
 return {
-  -- nvim-lspconfig is a Neovim's official collection of configurations for the Neovim's LSP client/framework (See `:h lsp` to check Neovim LSP feature supports)
+  -- nvim-lspconfig is a Neovim's official collection of LSP server configurations for the Neovim's LSP client/framework (See `:h lsp` to check Neovim LSP feature supports)
   {
     'neovim/nvim-lspconfig',
     -- See `:h lspconfig` for more help information
