@@ -235,7 +235,7 @@ return {
           lualine_b = {
             {
               'branch',
-              icon = { '', align = 'left', },
+              icon = { vim.g.have_nerd_fonts and '' or '⎇', align = 'left', },
               icons_enabled = true,
               separator = '',
             },

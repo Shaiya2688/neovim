@@ -70,9 +70,15 @@ function M.setup_plugins()
     { import = "plugins" },
   }
   -- Import plugins from the first-level sub dirs under the "plugins/"
-  for _, subdir in ipairs(vim.fn.glob(vim.fn.stdpath("config") .. "/lua/plugins/*/", 0, 1)) do
-    local name = vim.fn.fnamemodify(subdir:gsub("/$", ""), ":t")
-    table.insert(spec, { import = "plugins." .. name })
+  -- for _, subdir in ipairs(vim.fn.glob(vim.fn.stdpath("config") .. "/lua/plugins/*/", 0, 1)) do
+  --   local name = vim.fn.fnamemodify(subdir:gsub("/$", ""), ":t")
+  --   table.insert(spec, { import = "plugins." .. name })
+  -- end
+  -- TODO: Fixed for for windows, need check on ubuntu again
+  for name, type in vim.fs.dir(vim.fs.joinpath(vim.fn.stdpath("config"), "lua", "plugins")) do
+    if type == "directory" then
+      table.insert(spec, { import = "plugins." .. name })
+    end
   end
 
   --[[ Configure any other settings in opts ]]

@@ -68,9 +68,11 @@ utils.hl.on_colorscheme_changed(function()
 
   -- highlight group for git plugins
   utils.hl.create_group('UserGitAddSigns', { guifg='#a3e29e', guibg='#a3e29e', ctermfg=157, ctermbg=157 })
+  utils.hl.create_group('UserGitAddSignsTextView', { guifg='#a3e29e', ctermfg=157, bg='NONE' })
   utils.hl.create_group('UserGitAddLine', { guibg='#d9ffcd', ctermbg=194 })
   utils.hl.create_group('UserGitAddLineNr', { target = 'clear' })
   utils.hl.create_group('UserGitChangeSigns', { guifg='#c3d6e8', guibg='#c3d6e8', ctermfg=153, ctermbg=153 })
+  utils.hl.create_group('UserGitChangeSignsTextView', { guifg='#c3d6e8', ctermfg=153, bg='NONE' })
   utils.hl.create_group('UserGitChangeLine', { guibg='#c3d6e8', ctermbg=153 })
   utils.hl.create_group('UserGitChangeLineNr', { target = 'clear' })
   utils.hl.create_group('UserGitDeleteSigns', { gui='bold', cterm='bold', guifg='#ff0000', ctermfg=9, bg='NONE' })

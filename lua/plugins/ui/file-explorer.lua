@@ -104,6 +104,9 @@ return {
         created = {
           format = "%Y-%m-%d %I:%M:%S", -- format string for timestamp (see `:h os.date()`)
         },
+        name = {
+          use_git_status_colors = false,
+        },
         indent = {
           indent_size = 2,
           padding = 1,
@@ -163,6 +166,17 @@ return {
         -- },
       },
     },
+    config = function(_, opts)
+      local highlight_setup = function()
+        utils.hl.create_group('NeoTreeGitAdded', { target='UserGitAddSignsTextView' })
+        utils.hl.create_group('NeoTreeGitModified', { target='UserGitChangeSignsTextView' })
+      end
+      local ok, neotree = pcall(require, 'neo-tree')
+      if ok then
+        neotree.setup(opts)
+        utils.hl.on_colorscheme_changed(highlight_setup) -- Reset highlight groups when colorscheme changes
+      end
+    end
   },
 
 }
