@@ -99,6 +99,7 @@ vim.opt.showmatch = true -- When a bracket is inserted, briefly jump to the matc
 vim.opt.matchpairs = {'(:)', '{:}', '[:]'}
 vim.opt.matchtime = 5 -- 0.5 second to show the matching paren
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
+vim.opt.autochdir = true -- Change the current working directory (displayed by ':pwd' or ':verbose pwd') whenever you open a new file
 
 -- File options
 vim.opt.autowrite = false -- Disable auto write buffer contents to file
