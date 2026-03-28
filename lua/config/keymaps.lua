@@ -102,8 +102,8 @@ vim.keymap.set('t', '<Esc><Esc>', "<C-\\><C-n>", { desc = 'Enter Terminal Normal
 -- Exit terminal normal mode using 'i'/'I'/'a'/'A' keys
 
 --[[ Maps for Text Search ]]
-vim.keymap.set('n', '<F2>', "g*", { desc = "Search Current Word", silent = true })
-vim.keymap.set('v', '<F2>', "\"9y/<C-R>9<Cr>", { desc = "Search Visual Selection", silent = true })
+-- vim.keymap.set('n', '<F2>', "g*", { desc = "Search Current Word", silent = true })
+-- vim.keymap.set('v', '<F2>', "\"9y/<C-R>9<Cr>", { desc = "Search Visual Selection", silent = true })
 
 if true then return {} end
 

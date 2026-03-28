@@ -1,5 +1,51 @@
 "TODO: convert to lua implementation and make it compatible with windows
 
+vn <silent> <F2> "9y:call TextStr_Search("t0", @9)<cr>
+nn <silent> <F2> :call TextStr_Search("t0", expand("<cword>"))<cr>
+vn <silent> <C-F2> "9y:call JumpStack_DoJump('TextStr_Search', "t0", @9)<cr>
+vn <silent> <F26> "9y:call JumpStack_DoJump('TextStr_Search', "t0", @9)<cr>
+nn <silent> <C-F2> :call JumpStack_DoJump('TextStr_Search', "t0", expand("<cword>"))<cr>
+nn <silent> <F26> :call JumpStack_DoJump('TextStr_Search', "t0", expand("<cword>"))<cr>
+vn <silent> <F3> "9y:call JumpStack_DoJump('TextStr_Search', "t1", @9)<cr>
+nn <silent> <F3> :call JumpStack_DoJump('TextStr_Search', "t1", expand("<cword>"))<cr>
+nn <silent> <C-F3> :call JumpStack_DoJump('TextStr_Search', "t1")<cr>
+nn <silent> <F27> :call JumpStack_DoJump('TextStr_Search', "t1")<cr>
+vn <silent> <F4> "9y:call JumpStack_DoJump('TextStr_Search', "t2", @9)<cr>
+nn <silent> <F4> :call JumpStack_DoJump('TextStr_Search', "t2", expand("<cword>"))<cr>
+nn <silent> <C-F4> :call JumpStack_DoJump('TextStr_Search', "t2")<cr>
+nn <silent> <F28> :call JumpStack_DoJump('TextStr_Search', "t2")<cr>
+func TextStr_Search(_type, ...)
+  let input_pat = a:0 > 0 ? a:1 : input("> Find pattern input: ")
+  if input_pat != '' && ['t0', 't1', 't2']->count(a:_type)
+    if a:_type== "t0" " search one in current file
+      if !search(input_pat, 'n')
+        let v:errmsg = "Pattern not found: ".input_pat
+        echohl WarningMsg | echo v:errmsg | echohl None
+        return
+      endif
+      call feedkeys("\/".input_pat."\<cr>", "L") "use flag 'L' fix last used search pattern can not be changed by the function
+      call JumpStack_SetHighLightPattern(input_pat)
+    elseif a:_type== "t1" " search all in current file
+      exe "vimgrep \/".input_pat."\/ %"
+      let @/ = input_pat
+      call feedkeys(":set hls\<cr>:echo\<cr>", "L") "use flag 'L' fix last used search pattern can not be changed by the function
+      call JumpStack_SetHighLightPattern(input_pat)
+    elseif a:_type == "t2" " search all recursively
+      exe "vimgrep \/".input_pat."\/ % **"
+      let @/ = input_pat
+      call feedkeys(":set hls\<cr>:echo\<cr>", "L") "use flag 'L' fix last used search pattern can not be changed by the function
+      call JumpStack_SetHighLightPattern(input_pat)
+    endif
+  else
+    if input_pat == ''
+      let v:errmsg = "Pattern is null"
+    else
+      let v:errmsg = "TextStr_Search type invalid"
+    endif
+    normal! :echo
+  endif
+endfunc
+
 "TAGS file setting
 "auto loading tags and cscope.out
 autocmd VimEnter,BufRead * call UpdateTagConnection()
