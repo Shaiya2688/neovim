@@ -14,6 +14,8 @@ return {
         "stylua",
         "shfmt",
       },
+      install_root_dir = vim.fn.stdpath("data") .. "/mason", -- The directory in which to install packages.
+      PATH = "prepend", -- Where Mason should put its bin location in PATH. Can be one of: "prepend", "append", "skip" (doesn't modify PATH)
       ui = {
         icons = vim.g.have_nerd_fonts and {
           package_installed = "✓",

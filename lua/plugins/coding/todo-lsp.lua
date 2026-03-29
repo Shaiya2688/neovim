@@ -16,9 +16,155 @@ return {
       -- 'saghen/blink.cmp',
     },
 
+    opts = {
+      -- configuration for all lsp servers
+      -- ["*"] = {
+      --   capabilities = {},
+      --   keys = {
+      --     -- { "<leader>cl", function() Snacks.picker.lsp_config() end, desc = "Lsp Info" },
+      --     { "gd", vim.lsp.buf.definition, desc = "Goto Definition", has = "definition" },
+      --     { "gr", vim.lsp.buf.references, desc = "References", nowait = true },
+      --     { "gI", vim.lsp.buf.implementation, desc = "Goto Implementation" },
+      --     { "gy", vim.lsp.buf.type_definition, desc = "Goto T[y]pe Definition" },
+      --     { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
+      --     { "K", function() return vim.lsp.buf.hover() end, desc = "Hover" },
+      --     { "gK", function() return vim.lsp.buf.signature_help() end, desc = "Signature Help", has = "signatureHelp" },
+      --     { "<c-k>", function() return vim.lsp.buf.signature_help() end, mode = "i", desc = "Signature Help", has = "signatureHelp" },
+      --     { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "x" }, has = "codeAction" },
+      --     { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "x" }, has = "codeLens" },
+      --     { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" }, has = "codeLens" },
+      --     { "<leader>cR", function() Snacks.rename.rename_file() end, desc = "Rename File", mode ={"n"}, has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } },
+      --     { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
+      --     { "<leader>cA", LazyVim.lsp.action.source, desc = "Source Action", has = "codeAction" },
+      --     { "]]", function() Snacks.words.jump(vim.v.count1) end, has = "documentHighlight", desc = "Next Reference", enabled = function() return Snacks.words.is_enabled() end },
+      --     { "[[", function() Snacks.words.jump(-vim.v.count1) end, has = "documentHighlight", desc = "Prev Reference", enabled = function() return Snacks.words.is_enabled() end },
+      --     { "<a-n>", function() Snacks.words.jump(vim.v.count1, true) end, has = "documentHighlight", desc = "Next Reference", enabled = function() return Snacks.words.is_enabled() end },
+      --     { "<a-p>", function() Snacks.words.jump(-vim.v.count1, true) end, has = "documentHighlight", desc = "Prev Reference", enabled = function() return Snacks.words.is_enabled() end },
+      --     {
+      --       "<leader>co",
+      --       LazyVim.lsp.action["source.organizeImports"],
+      --       desc = "Organize Imports",
+      --       has = "codeAction",
+      --       enabled = function(buf)
+      --         local code_actions = vim.tbl_filter(function(action)
+      --           return action:find("^source%.organizeImports%.?$")
+      --         end, LazyVim.lsp.code_actions({ bufnr = buf }))
+      --         return #code_actions > 0
+      --       end
+      --     },
+      --   },
+      -- },
+      servers = {
+        -- <server_name> = { enabled = false, mason = flase, settings = {}, setup = function(server) end, },
+        -- mason: set to false if you don't want this server to be installed with mason
+        -- enabled: set to false if you don't want this server to be enabled automatically
+        -- settings: default settings passed to vim.lsp.config.<server_name>
+        -- setup: implementation for native install
+        clangd = { enabled = false, mason = false, settings = {}, setup = function(server) end, },
+      },
+    },
+
+    config = function(_, opts)
+      -- TODO: custom opts, and parsing opts
+      vim.lsp.config.clangd = {
+        cmd = {
+          vim.fn.stdpath("data") .. "/mason/bin/clangd",
+          "--background-index",
+          "--clang-tidy",
+          "--header-insertion=iwyu",
+        },
+        filetypes = { "c", "cpp", "objc", "objcpp" },
+        root_markers = { ".clangd", "compile_commands.json", ".git" },
+      }
+
+      vim.lsp.config.lua_ls = {
+        cmd = { vim.fn.stdpath("data") .. "/mason/bin/lua-language-server" },
+        filetypes = { "lua" },
+        root_markers = { ".luarc.json", ".luacheckrc", ".git" },
+        settings = {
+          Lua = {
+            runtime = { version = "LuaJIT" },
+            diagnostics = { globals = { "vim" } },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+              checkThirdParty = false,
+            },
+          },
+        },
+      }
+
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          local bufnr = args.buf
+          local opts = { buffer = bufnr, silent = true }
+
+          -- 导航
+          vim.keymap.set("n", "<leader>fg", vim.lsp.buf.definition, opts)
+          vim.keymap.set("n", "<leader>fd", vim.lsp.buf.declaration, opts)
+          vim.keymap.set("n", "<leader>fi", vim.lsp.buf.implementation, opts)
+          vim.keymap.set("n", "<leader>fs", vim.lsp.buf.references, opts)
+          vim.keymap.set("n", "<leader>ft", vim.lsp.buf.type_definition, opts)
+
+          -- 信息提示
+          vim.keymap.set("n", "<leader>fk", vim.lsp.buf.hover, opts)
+          vim.keymap.set("n", "<leader>fn", vim.lsp.buf.signature_help, opts)
+
+          -- 代码操作
+          vim.keymap.set("n", "<leader>fn", vim.lsp.buf.rename, opts)
+          vim.keymap.set("n", "<leader>fa", vim.lsp.buf.code_action, opts)
+          vim.keymap.set("v", "<leader>fa", vim.lsp.buf.code_action, opts)
+          vim.keymap.set("n", "<leader>f=", function()
+            vim.lsp.buf.format({ async = true })
+          end, opts)
+          -- -- 诊断导航
+          -- vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+          -- vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+          -- vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
+          -- vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
+          -- -- 工作区
+          -- vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
+          -- vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
+          -- vim.keymap.set("n", "<leader>wl", function()
+          --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+          -- end, opts)
+          -- 启用内置补全（Neovim 0.11+）
+          if client:supports_method("textDocument/completion") then
+            vim.lsp.completion.enable(
+              true,
+              client.id,
+              bufnr,
+              { autotrigger = false }
+            )
+          end
+          -- 格式化保存（可选）
+          -- if client:supports_method("textDocument/formatting") then
+          --   vim.api.nvim_create_autocmd("BufWritePre", {
+          --     buffer = bufnr,
+          --     callback = function()
+          --       vim.lsp.buf.format({ async = false })
+          --     end,
+          --   })
+          -- end
+        end,
+      })
+
+      vim.defer_fn(function() -- check why need defer_fn?
+        vim.lsp.enable("clangd")
+        vim.lsp.enable("lua_ls")
+      end, 100)
+
+    end,
+
   },
 }
 end
+
+
+
+
+
 return {
 
   -- LSP Plugins

@@ -21,7 +21,7 @@ return {
       end, desc = "Focus Aerial (Symbol List)" },
     },
     opts = {
-      backends = { "treesitter", "lsp", "markdown", "asciidoc", "man" }, -- Priority list of preferred backends for aerial
+      backends = { "lsp", "treesitter", "markdown", "asciidoc", "man" }, -- Priority list of preferred backends for aerial
       layout = {
         width = nil,
         max_width = { 40, 0.2 }, -- {40, 0.2} means "the lesser of 40 columns or 20% of total"
@@ -91,6 +91,12 @@ return {
         "Struct",
         "Variable",
       },
+      -- For symbol list debug
+      -- filter_kind = false,
+      -- post_parse_symbol = function(bufnr, item, ctx)
+      --   item.name = string.format("%s [%s]", item.name, item.kind)
+      --   return true
+      -- end,
       highlight_mode = "last", -- Only the most-recently focused window will have its highlighted location marked in the aerial buffer
       highlight_on_hover = false, -- Disable highlight the symbol in the source buffer when cursor is in the aerial win
       highlight_on_jump = 300, -- When jumping to a symbol, highlight the line for this many ms, set to false to disable
@@ -117,9 +123,9 @@ return {
         last_item  = "└╴", -- last_item = "└─",
         whitespace = "  ",
       },
-      get_highlight = function(symbol, is_icon, is_collapsed) -- Set this function to override the highlight groups for certain symbols
-        -- return "MyHighlight" .. symbol.kind
-      end,
+      -- get_highlight = function(symbol, is_icon, is_collapsed) -- Set this function to override the highlight groups for certain symbols
+      --   return "MyHighlight" .. symbol.kind
+      -- end,
     },
   },
 
