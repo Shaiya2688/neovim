@@ -92,6 +92,43 @@ function M.remove_dir(path)
   return pcall(vim.fn.system, cmd)
 end
 
+function M.is_parent_dir(parent, child)
+  parent = vim.fn.fnamemodify(parent, ':p'):gsub('\\', '/'):gsub('/+$', '')
+  child = vim.fn.fnamemodify(child, ':p'):gsub('\\', '/'):gsub('/+$', '')
+  if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    parent = parent:lower()
+    child = child:lower()
+  end
+  if parent == child then
+    return true
+  end
+  return child:sub(1, #parent + 1) == parent .. '/'
+end
+
+function M.smart_root(root_patterns)
+  local root = vim.fs.root(0, root_patterns)
+  if not root then
+    local dir = vim.fn.expand('%:p:h')
+    local cwd = vim.fn.getcwd()
+    if M.is_parent_dir(dir, cwd) then
+      root = dir
+    else
+      root = cwd
+    end
+  end
+  return root
+end
+
+function M.project_root()
+  local root_patterns = { '.repo', '.git' }
+  return M.smart_root(root_patterns)
+end
+
+function M.workspace_root()
+  local root_patterns = { 'cscope.files', '.git', '.repo' }
+  return M.smart_root(root_patterns)
+end
+
 M.setup()
 
 return M

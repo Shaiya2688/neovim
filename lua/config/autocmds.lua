@@ -30,7 +30,7 @@ vim.api.nvim_create_autocmd('WinLeave', {
 utils.hl.on_colorscheme_changed(function()
   -- highlight group for viewing 256-indexd colors
   for index = 0, 255 do
-    ok, err = utils.hl.create_group(string.format("ColorView_%d", index), { fg = 0, bg = index })
+    local ok, err = utils.hl.create_group(string.format("ColorView_%d", index), { fg = 0, bg = index })
     if not ok then
       vim.notify(err, vim.log.levels.ERROR)
       return

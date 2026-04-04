@@ -73,6 +73,10 @@ return {
           "--clang-tidy",
           "--header-insertion=iwyu",
         },
+        on_attach = function(client, bufnr)
+          client.server_capabilities.semanticTokensProvider = nil
+          vim.diagnostic.enable(false)
+        end,
         filetypes = { "c", "cpp", "objc", "objcpp" },
         root_markers = { ".clangd", "compile_commands.json", ".git" },
       }
@@ -101,21 +105,21 @@ return {
           local opts = { buffer = bufnr, silent = true }
 
           -- 导航
-          vim.keymap.set("n", "<leader>fg", vim.lsp.buf.definition, opts)
-          vim.keymap.set("n", "<leader>fd", vim.lsp.buf.declaration, opts)
-          vim.keymap.set("n", "<leader>fi", vim.lsp.buf.implementation, opts)
-          vim.keymap.set("n", "<leader>fs", vim.lsp.buf.references, opts)
-          vim.keymap.set("n", "<leader>ft", vim.lsp.buf.type_definition, opts)
+          vim.keymap.set("n", "fg", vim.lsp.buf.definition, opts)
+          vim.keymap.set("n", "fd", vim.lsp.buf.declaration, opts)
+          vim.keymap.set("n", "fi", vim.lsp.buf.implementation, opts)
+          vim.keymap.set("n", "fs", vim.lsp.buf.references, opts)
+          vim.keymap.set("n", "ft", vim.lsp.buf.type_definition, opts)
 
           -- 信息提示
-          vim.keymap.set("n", "<leader>fk", vim.lsp.buf.hover, opts)
-          vim.keymap.set("n", "<leader>fn", vim.lsp.buf.signature_help, opts)
+          vim.keymap.set("n", "fk", vim.lsp.buf.hover, opts)
+          vim.keymap.set("n", "fn", vim.lsp.buf.signature_help, opts)
 
           -- 代码操作
-          vim.keymap.set("n", "<leader>fn", vim.lsp.buf.rename, opts)
-          vim.keymap.set("n", "<leader>fa", vim.lsp.buf.code_action, opts)
-          vim.keymap.set("v", "<leader>fa", vim.lsp.buf.code_action, opts)
-          vim.keymap.set("n", "<leader>f=", function()
+          vim.keymap.set("n", "fn", vim.lsp.buf.rename, opts)
+          vim.keymap.set("n", "fa", vim.lsp.buf.code_action, opts)
+          vim.keymap.set("v", "fa", vim.lsp.buf.code_action, opts)
+          vim.keymap.set("n", "f=", function()
             vim.lsp.buf.format({ async = true })
           end, opts)
           -- -- 诊断导航
@@ -151,7 +155,7 @@ return {
       })
 
       vim.defer_fn(function() -- check why need defer_fn?
-        vim.lsp.enable("clangd")
+        -- vim.lsp.enable("clangd")
         vim.lsp.enable("lua_ls")
       end, 100)
 
@@ -339,7 +343,7 @@ return {
         severity_sort = true,
         float = { border = 'rounded', source = 'if_many' },
         underline = { severity = vim.diagnostic.severity.ERROR },
-        signs = vim.g.have_nerd_font and {
+        signs = vim.g.have_nerd_fonts and {
           text = {
             [vim.diagnostic.severity.ERROR] = '󰅚 ',
             [vim.diagnostic.severity.WARN] = '󰀪 ',

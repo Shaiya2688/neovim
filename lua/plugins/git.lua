@@ -36,7 +36,7 @@ return {
         vim.keymap.set('n', 'git', gs.toggle_signs, { buffer = buffer, desc = "Git Signs Toggle" })
         vim.keymap.set('n', 'gs', gs.toggle_linehl, { buffer = buffer, desc = "Git Line Highlights Toggle" })
         vim.keymap.set('n', 'gd', function() gs.setqflist('all', { use_location_list = true, nr = 0, open = true }) end, { buffer = buffer, desc = "Git Diff All Files With Staged" }) -- TODO: auto open first item, and add to jump stack
-        vim.keymap.set('n', 'gD', function() gs.setqflist('all', { use_location_list = true, nr = 0, open = true }) end, { buffer = buffer, desc = "Git Diff All Files With Staged" }) -- TODO: change to diff with HEAD
+        -- vim.keymap.set('n', 'gD', function() gs.setqflist('all', { use_location_list = true, nr = 0, open = true }) end, { buffer = buffer, desc = "Git Diff All Files With Staged" }) -- TODO: change to diff with HEAD
         vim.keymap.set('n', 'gb', function() gs.blame_line({ full = true, }) end, { buffer = buffer, desc = "Git Blame Line" })
         vim.keymap.set('n', 'gB', gs.blame, { buffer = buffer, desc = "Git Blame Buffer" })
         vim.keymap.set('n', 'gp', function()

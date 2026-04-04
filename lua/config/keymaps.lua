@@ -22,8 +22,8 @@ vim.keymap.set({'n', 'v'}, '<C-w>m', utils.mouse.mode_toggle, { desc = "Toggle M
 
 
 --[[ Maps for Fold ]]
-vim.keymap.set('n', 'f<Space>', 'za', { remap = true, desc = "Toggle Fold Under Cursor" })
-vim.keymap.set('n', '<Leader>f<Space>', utils.fold.column_toggle, { desc = "Toggle Fold Column" })
+vim.keymap.set('n', 'z<Space>', 'za', { remap = true, desc = "Toggle Fold Under Cursor" })
+vim.keymap.set('n', '<Leader>z<Space>', utils.fold.column_toggle, { desc = "Toggle Fold Column" })
 
 
 --[[ Maps for Window ]]
@@ -83,16 +83,20 @@ vim.keymap.set('v', '<', "<gv", { desc = "Move Selected Text Lines Left" })
 
 
 --[[ Maps for Terminal ]]
--- Close or Open terminal in new window using <C-_> or <C-/>
+-- Open or Close window terminal using <C-w> + <C-_> or <C-/>
+vim.keymap.set({ 'n', 't' }, '<C-w><C-_>', function()
+  utils.terminal.win_toggle(false)
+end, { desc = "Open / Close New Terminal", silent = true })
+vim.keymap.set({ 'n', 't' }, 'v<C-w><C-_>', function()
+  utils.terminal.win_toggle(true)
+end, { desc = "Open / Close New Terminal (Vertical)", silent = true })
+-- Open or Hide tab terminal using <C-_> or <C-/>
 vim.keymap.set({ 'n', 't' }, '<C-_>', function()
-	local cmd
-	if vim.opt.buftype:get() ~= 'terminal' then
-		cmd = "horizontal terminal" .. ((vim.fn.executable('bash') and " bash") or "")
-	else
-		cmd = "quit"
-	end
-	vim.cmd(cmd)
-end, { desc = "Open / Close Terminal", silent = true })
+  utils.terminal.tab_toggle(false)
+end, { desc = "Open / Hide Terminal", silent = true })
+vim.keymap.set({ 'n', 't' }, 'v<C-_>', function()
+  utils.terminal.tab_toggle(true)
+end, { desc = "Open / Hide Terminal (Vertical)", silent = true })
 -- Open terminal in new tab page or floating window, should using above key combined with <C-t> or <C-f>
 vim.keymap.set('n', '<C-_><C-t>', "<Cmd>execute 'tab terminal' . (executable('bash') ? ' bash' : '')<Cr>", { desc = "Open Terminal in New Tab Page", silent = true })
 -- TODO: support floating terminal

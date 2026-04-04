@@ -1,6 +1,6 @@
 -- TODO: Try using 'bufferline'
 vim.g.tabline = 'lualine' -- Possible values: 'lualine', 'bufferline'
-vim.g.tabline_show = 1    -- 0: windows, 1: buffers
+vim.g.tabline_show = 0    -- 0: windows, 1: buffers
 vim.keymap.set('n', '<Leader>t<Space>', function()
   if vim.g.tabline_show == 0 then
     vim.g.tabline_show = 1
