@@ -31,12 +31,12 @@ return {
         sources = vim.g.have_nerd_fonts and {
           { source = "filesystem", display_name = " 󰉓 Files " },
           { source = "buffers", display_name = " 󰈚 Buffers " },
-          { source = "git_status", display_name = " 󰊢 Git " },
+          -- { source = "git_status", display_name = " 󰊢 Git " },
           { source = "document_symbols", display_name = "  Symbols " },
         } or {
           { source = "filesystem", display_name = " Files " },
           { source = "buffers", display_name = " Buffers " },
-          { source = "git_status", display_name = " Git " },
+          -- { source = "git_status", display_name = " Git " },
           { source = "document_symbols", display_name = " Symbols " },
         },
       },
@@ -63,9 +63,28 @@ return {
           -- ["<"] = "none",
           -- [">"] = "none",
           -- ["<space>"] = "none", -- disable will cause the nested nodes invisible
+          ["/"] = "none",
+          ["*"] = "fuzzy_finder",
         },
       },
       filesystem = {
+        bind_to_cwd = false, -- true creates a 2-way binding between vim's cwd and neo-tree's root
+        filtered_items = {
+          hide_gitignored = false,
+          hide_by_pattern = {
+            "*log.txt",
+            "*.log",
+            "output*",
+            "out",
+          },
+          always_show_by_pattern = { -- uses glob style patterns
+            --".env*",
+          },
+          never_show_by_pattern = { -- uses glob style patterns
+            "*cscope.*",
+            "*tags",
+          },
+        },
         window = {
           mappings = {
             ["."] = 'close_window',
@@ -98,7 +117,14 @@ return {
       document_symbols = {}, -- using default
       nesting_rules = {},
       default_component_configs = {
+        file_size = {
+          enabled = false,
+        },
+        type = {
+          enabled = false,
+        },
         last_modified = {
+          enabled = false,
           format = "%Y-%m-%d %I:%M:%S", -- format string for timestamp (see `:h os.date()`)
         },
         created = {
@@ -146,8 +172,10 @@ return {
             -- Status type
             untracked = "?",
             -- ignored   = "!",
-            ignored   = "☒",
-            unstaged  = "⊹",
+            -- ignored   = "☒",
+            ignored   = "",
+            -- unstaged  = "⊹",
+            unstaged  = "󰄱",
             staged    = "✔︎",
             conflict  = vim.g.have_nerd_fonts and "" or "✗",
           },

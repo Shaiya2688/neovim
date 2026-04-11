@@ -106,7 +106,10 @@ function M.is_parent_dir(parent, child)
 end
 
 function M.smart_root(root_patterns)
-  local root = vim.fs.root(0, root_patterns)
+  local root = nil
+  if root_patterns then
+    root = vim.fs.root(0, root_patterns)
+  end
   if not root then
     local dir = vim.fn.expand('%:p:h')
     local cwd = vim.fn.getcwd()
@@ -117,6 +120,10 @@ function M.smart_root(root_patterns)
     end
   end
   return root
+end
+
+function M.local_root()
+  return M.smart_root()
 end
 
 function M.project_root()

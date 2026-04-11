@@ -326,6 +326,18 @@ return {
               update_in_insert = false, -- Update diagnostics in insert mode.
               always_visible = true,   -- Show diagnostics even if there are none.
             },
+            -- function()
+            --   local name = ""
+            --   local ok, as = pcall(require, 'auto-session.lib')
+            --   if ok then
+            --     name = as.current_session_name(true)
+            --   end
+            --   if name ~= "" then
+            --     local icon = vim.g.have_nerd_fonts and ' ' or ""
+            --     name = icon .. name
+            --   end
+            --   return name
+            -- end,
             {
               -- TODO: TBD
               'lsp_status',

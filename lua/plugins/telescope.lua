@@ -57,7 +57,7 @@ return {
               width = 0.8,
               height = 0.95, -- 0.9
               preview_height = 0.55,
-              -- preview_cutoff = 40,
+              preview_cutoff = 0,
               prompt_position = "top", -- bottom
               mirror = false,
             },
@@ -67,16 +67,23 @@ return {
               preview_width = 0.55,
             },
           },
-          -- vimgrep_arguments = {
-          --   "rg",
-          --   "--color=never",
-          --   "--no-heading",
-          --   "--with-filename",
-          --   "--line-number",
-          --   "--column",
-          --   "--smart-case",
-          --   "--trim",
-          -- },
+          cycle_layout_list = { "vertical", "horizontal", },
+          file_ignore_patterns = {
+            ".*cscope%..*",
+            ".*tags",
+            "^%.git/"
+          },
+          vimgrep_arguments = {
+            "rg",
+            "--color=never",
+            "--no-heading",
+            "--with-filename",
+            "--line-number",
+            "--column",
+            "--smart-case",
+            -- "--trim",
+            "--no-ignore",
+          },
           mappings = {
             i = {
               -- actions.which_key shows the mappings for your picker,
@@ -99,6 +106,7 @@ return {
                 name_width = 40, -- 30
                 winblend = 5,
               },
+              ['<C-n>'] = actions_layout.cycle_layout_next,
               ['<C-x>'] = false,
               ['<C-s>'] = "select_horizontal",
               ['<A-p>'] = actions_layout.toggle_preview,
@@ -144,6 +152,8 @@ return {
         pickers = {
           find_files = {
             previewer = false, -- disable preview to speed up file search, use <A-p> to toggle preview
+            no_ignore = true,
+            no_ignore_parent = true,
             -- find_command = function()
             --   if 1 == vim.fn.executable("rg") then
             --     return { "rg", "--files", "--color", "never", "-g", "!.git" }
@@ -159,6 +169,7 @@ return {
             -- end,
           },
           buffers = {
+            previewer = false, -- disable preview to speed up file search, use <A-p> to toggle preview
             sort_mru = true,
             sort_lastused = true,
             ignore_current_buffer = true,
@@ -189,7 +200,7 @@ return {
               i = {
                 ['<C-a>'] = actions_lga.quote_prompt(),
                 ['<C-i>'] = actions_lga.quote_prompt({ postfix = " --iglob " }),
-                ['<C-t>'] = actions_lga.quote_prompt({ postfix = " -t " }),
+                -- ['<C-t>'] = actions_lga.quote_prompt({ postfix = " -t " }),
                 -- freeze the current list and start a fuzzy search in the frozen list
                 -- ['<C-space>'] = actions_lga.to_fuzzy_refine,
               },
@@ -227,6 +238,11 @@ return {
           cwd = utils.file.workspace_root(),
         })
       end, { desc = "Find Files (Workspace)" })
+      vim.keymap.set('n', '<Leader>f<C-f>', function()
+        builtin.find_files({
+          cwd = utils.file.local_root(),
+        })
+      end, { desc = "Find Files (Local)" })
       vim.keymap.set('n', '<Leader>fF', function()
         builtin.find_files({
           cwd = utils.file.project_root(),
@@ -234,6 +250,7 @@ return {
       end, { desc = "Find Files (Project)" })
       vim.keymap.set('n', '<Leader>fg', builtin.git_files, { desc = "Find Files (Git)" })
       vim.keymap.set('n', '<Leader>fb', builtin.buffers, { desc = "Find Buffers" })
+      vim.keymap.set('n', '<Leader>fo', builtin.oldfiles, { desc = "Find Old Files" })
       vim.keymap.set('n', '<Leader>fc', function()
         builtin.find_files({
           cwd = vim.fn.stdpath('config'),
@@ -246,6 +263,12 @@ return {
           use_regex = true,
         })
       end, { desc = "Live Grep String (Workspace)" })
+      vim.keymap.set('n', '<Leader>f<C-s>', function()
+        builtin.live_grep({
+          cwd = utils.file.local_root(),
+          use_regex = true,
+        })
+      end, { desc = "Live Grep String (Local)" })
       vim.keymap.set('n', '<Leader>fS', function()
         builtin.live_grep({
           cwd = utils.file.project_root(),
@@ -258,6 +281,12 @@ return {
           use_regex = true,
         })
       end, { desc = "Live Grep String with Args (Workspace)" })
+      vim.keymap.set('n', '<Leader>f<C-a>', function()
+        telescope.extensions.live_grep_args.live_grep_args({
+          cwd = utils.file.local_root(),
+          use_regex = true,
+        })
+      end, { desc = "Live Grep String with Args (Local)" })
       vim.keymap.set('n', '<Leader>fA', function()
         telescope.extensions.live_grep_args.live_grep_args({
           cwd = utils.file.project_root(),
@@ -272,6 +301,14 @@ return {
           },
         })
       end, { desc = "Grep Word Under Cursor or Visual Selection (Workspace)" })
+      vim.keymap.set({ 'n', 'v' }, '<Leader>f<C-w>', function()
+        builtin.grep_string({
+          cwd = utils.file.local_root(),
+          additional_args = {
+            "--case-sensitive",
+          },
+        })
+      end, { desc = "Grep Word Under Cursor or Visual Selection (Local)" })
       vim.keymap.set({ 'n', 'v' }, '<Leader>fW', function()
         builtin.grep_string({
           cwd = utils.file.project_root(),
@@ -281,8 +318,8 @@ return {
         })
       end, { desc = "Grep Word Under Cursor or Visual Selection (Project)" })
       -- keymaps: git, check gitsigns.nvim for more git keymaps
-      vim.keymap.set('n', 'gc', builtin.git_bcommits, { desc = "Git Commits (Buffer)" })
-      vim.keymap.set('n', 'gC', builtin.git_commits, { desc = "Git Commits (All)" })
+      vim.keymap.set('n', 'gl', builtin.git_bcommits, { desc = "Git Commits Log (Buffer)" })
+      vim.keymap.set('n', 'gL', builtin.git_commits, { desc = "Git Commits Log (All)" })
       vim.keymap.set('n', 'gD', builtin.git_status, { desc = "Git Diff All Files With HEAD" })
       -- keymaps: quickfix, locationlist, diagnostics
       vim.keymap.set('n', '<Leader>fq', builtin.quickfix, { desc = "Open Quickfix" })

@@ -2,6 +2,19 @@ local utils = _utils
 local augroup_id = vim.api.nvim_create_augroup("UserCustom", { clear = true })
 -- Add any additional autocmds or remove existing autocmds here
 
+-- Indent options for neovim's config written
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+  group = augroup_id,
+  pattern = { "*.lua", "*.vim" },
+  callback = function()
+    local ft = vim.bo.filetype
+    if ft == "lua" or ft == "vim" then
+      vim.opt_local.tabstop = 2 -- Number of spaces tabs count for
+      vim.opt_local.expandtab = true -- Use <Tab> instead of <Space> for indent
+    end
+  end,
+})
+
 -- Enter terminal mode automatically if terminal was opened
 vim.api.nvim_create_autocmd({ "TermOpen" }, {
   group = augroup_id,

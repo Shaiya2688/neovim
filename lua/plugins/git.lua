@@ -98,6 +98,7 @@ return {
                 return true
               end
             end
+            return false
           end, 10)
         end
         local diff_head = function()
@@ -117,6 +118,7 @@ return {
                 return true
               end
             end
+            return false
           end, 10)
         end
         vim.keymap.set('n', 'ghd', function() toggle_diffthis(diff_stage) end, { buffer = buffer, desc = "Git Diff All Hunks With Staged" })
@@ -170,7 +172,6 @@ return {
     end
   },
 
-  -- TODO git log(gl), and hunk fold (ghf)
-  -- vim.keymap.set('n', 'gl', "<Cmd>Gitsigns toggle_signs<Cr>", { buffer = buffer, desc = "Git Log" })
+  -- TODO git hunk fold (ghf)
 
 }
